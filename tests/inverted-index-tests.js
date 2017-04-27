@@ -1,12 +1,15 @@
 /* eslint no-undef: 0 */
-const emptyJSONFile = require('../fixures/emptyJSONFile.json');
-const validJSONFile = require('../fixures/validFile.json');
-const invalidJSONFile = require('../fixures/invalidJSONFile.json');
-const InvertedIndex = require('../src/inverted-index.js').InvertedIndex;
+// require sample files
+const emptyJSONFile = require('../fixures/emptyJSONFile.json'),
+  validJSONFile = require('../fixures/validFile.json'),
+  invalidJSONFile = require('../fixures/invalidJSONFile.json'),
+  InvertedIndex = require('../src/inverted-index.js').InvertedIndex;
 
 const invertedIndex = new InvertedIndex();
 
+
 describe('InvertedIndex', () => {
+  // this suit makes sure that Inverted index contains the required class
   describe('Correctness of InvatedIndexClass', () => {
     it('Should be defined when instantiated', () => {
       expect(invertedIndex).toBeDefined();
@@ -25,6 +28,7 @@ describe('InvertedIndex', () => {
     });
   });
 
+  // this suit ensures that isFileValid works for as many input as possible
   describe('InvertedIndex.isFileValid', () => {
     it('Should return \'Invalid File: File must be a real JSON file\' when no argument is passed', () => {
       expect(invertedIndex.isFileValid()).toEqual('Invalid File: File must be a real JSON file');
@@ -59,5 +63,39 @@ describe('InvertedIndex', () => {
       expect(invertedIndex.isFileValid(malformedJSONFile)).toString();
     });
   });
+
+  // this suit decribes method
+  describe('InvertedIndex.readFile', () => {
+    it('Should be a function', () => {
+      expect(typeof (invertedIndex.readFile)).toBe('function');
+    });
+
+    it('Should return \'returned object should be equal to the internal file object\' when read is successful', () => {
+      const readResult = invertedIndex.readFile(validJSONFile);
+      const fileContent = invertedIndex.getFile();
+      expect(readResult).toEqual(fileContent);
+    });
+
+    it('Should return an error message when passed with an invalid file', () => {
+      const readResult = invertedIndex.readFile(emptyJSONFile);
+      expect(typeof readResult).toBe('string');
+    });
+  });
 });
 
+// this suit contains unit tests for createIndex method
+describe('InvertedIndex.createIndex', () => {
+  it('Should return an index when provided with valid filename and argument', () => {
+    const expectedIndex = {
+      an: [0],
+      inquiry: [0],
+      the: [0, 1],
+      string: [0, 1],
+      third: [1],
+      world: [1],
+      from: [1]
+    };
+
+    expect(invertedIndex.createIndex('validJSONFile', validJSONFile)).toEqual(expectedIndex);
+  });
+});
