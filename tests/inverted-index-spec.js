@@ -7,9 +7,21 @@ const InvertedIndex = require('../src/inverted-index.js').InvertedIndex;
 const invertedIndex = new InvertedIndex();
 
 describe('InvertedIndex', () => {
-  describe('Existence of Inverted Index Class', () => {
+  describe('Correctness of InvatedIndexClass', () => {
     it('Should be defined when instantiated', () => {
       expect(invertedIndex).toBeDefined();
+    });
+
+    it('Should contain isFileValid Method', () => {
+      expect(invertedIndex.isFileValid).toBeDefined();
+    });
+
+    it('Should contain readFile method', () => {
+      expect(invertedIndex.readFile).toBeDefined();
+    });
+
+    it('Should contain search method', () => {
+      expect(invertedIndex.search).toBeDefined();
     });
   });
 
