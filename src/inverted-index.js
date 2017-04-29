@@ -1,10 +1,14 @@
 /* eslint require-jsdoc: 0*/
 class InvertedIndex {
   contructor() {
-    this.index = [];
+    this.index = {};
     this.token = '';
+    this.books = {};
   }
 
+  getBooks() {
+    return this.books;
+  }
   isFileValid(books) {
     this.validity = true;
     if (!books || books === true) {
@@ -12,6 +16,7 @@ class InvertedIndex {
     } else {
       try {
         const stringifiedBooks = JSON.stringify(books);
+        JSON.parse(stringifiedBooks)
         // check if it is an empty stringified JSON object
         if (!stringifiedBooks.replace(/"/g, '')) {
           this.validity = 'Empty File: The JSON File must not be empty';
@@ -36,6 +41,17 @@ class InvertedIndex {
     }
     return this.validity;
   }
+
+  readFile(books) {
+    const validity = this.isFileValid(books);
+    if (validity === true) {
+      this.books = { error: '', books };
+    } else {
+      this.books = { error: validity, books: [] };
+    }
+    return this.books;
+  }
+
 }
 
 module.exports = { InvertedIndex };

@@ -67,6 +67,10 @@ describe('InvertedIndex', () => {
       expect(invertedIndex.isFileValid(emptyJSONFile).toEqual('Empty File: The JSON File must not be empty'));
     });
 
+    it('Should return \'Invalid File: File must be a real JSON file\' when an Invalid json file is passed', () => {
+      expect(invertedIndex.isFileValid(invalidJSONFile)).toEqual('Invalid File: File must be a real JSON file');
+    });
+
     it('Should return \'Malformed File: The JSON file you passed in is out of shape. Please check again\' when a malformed File is passed', () => {
       expect(invertedIndex.isFileValid(malformedJSONFile)).toBe('Malformed File: The JSON file you passed in is out of shape. Please check again');
     });
@@ -80,13 +84,13 @@ describe('InvertedIndex', () => {
 
     it('Should return \'returned object should be equal to the internal file object\' when read is successful', () => {
       const readResult = invertedIndex.readFile(validJSONFile);
-      const fileContent = invertedIndex.getFile();
+      const fileContent = invertedIndex.getBooks();
       expect(readResult).toEqual(fileContent);
     });
 
     it('Should return an error message when passed with an invalid file', () => {
       const readResult = invertedIndex.readFile(emptyJSONFile);
-      expect(typeof readResult).toBe('string');
+      expect(readResult.error).toBeTruthy();
     });
   });
 });
