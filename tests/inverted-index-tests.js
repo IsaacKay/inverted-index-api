@@ -1,10 +1,19 @@
 /* eslint no-undef: 0 */
 // require sample files
+const fs = require('fs');
+const path = require('path');
 const emptyJSONFile = require('../fixures/emptyJSONFile.json'),
   validJSONFile = require('../fixures/validFile.json'),
-  invalidJSONFile = require('../fixures/invalidJSONFile.json'),
-  InvertedIndex = require('../src/inverted-index.js').InvertedIndex;
+  malformedJSONFile = require('../fixures/malformedJSONFile.json');
+const InvertedIndex = require('../src/inverted-index.js').InvertedIndex;
 
+
+// cannot require bad json file so i used fs.readFileSync instead
+const invalidJSONFile = fs.readFileSync(
+  path.join(
+    __dirname, '../fixures/invalidJSONFile.json')
+  , 'utf-8')
+  .toString();
 const invertedIndex = new InvertedIndex();
 
 
@@ -51,19 +60,14 @@ describe('InvertedIndex', () => {
     });
 
     it('Should return \'true\' when a valid argument is passed as', () => {
-      expect(invertedIndex.isFileValid(validJSONFile)).toBeTrue();
+      expect(invertedIndex.isFileValid(validJSONFile)).toBe(true);
     });
 
     it('Should return \'Empty File: The JSON File must not be empty\' an empty JSON file is passed', () => {
       expect(invertedIndex.isFileValid(emptyJSONFile).toEqual('Empty File: The JSON File must not be empty'));
     });
 
-    it('Should return \'Invalid File: The JSON File is not in correct form\' when an Invalid json file is passed', () => {
-      expect(invertedIndex.isFileValid(invalidJSONFile)).toEqual('Invalid File: JSON file Does not contain valid JSON object');
-    });
-
     it('Should return \'Malformed File: The JSON file you passed in is out of shape. Please check again\' when a malformed File is passed', () => {
-      const malformedJSONFile = fs.readFileSync('../fixures/malformedJSONFile.json').toString();
       expect(invertedIndex.isFileValid(malformedJSONFile)).toBe('Malformed File: The JSON file you passed in is out of shape. Please check again');
     });
   });
