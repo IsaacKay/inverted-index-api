@@ -1,9 +1,8 @@
 [
   {
-    'key': 2
-  }
-
+    "here": "this is a malformed file"
+  },
   {
-    'key': 553
+    "title": "this is a malformed file"
   }
 ]
