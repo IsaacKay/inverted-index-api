@@ -10,7 +10,7 @@ const invertedIndex = new InvertedIndex();
 
 describe('InvertedIndex', () => {
   // this suit makes sure that Inverted index contains the required class
-  describe('Correctness of InvatedIndexClass', () => {
+  describe('Correctness of InvertedIndexClass', () => {
     it('Should be defined when instantiated', () => {
       expect(invertedIndex).toBeDefined();
     });
@@ -23,8 +23,12 @@ describe('InvertedIndex', () => {
       expect(invertedIndex.readFile).toBeDefined();
     });
 
-    it('Should contain search method', () => {
-      expect(invertedIndex.search).toBeDefined();
+    it('Should contain searchIndex method', () => {
+      expect(invertedIndex.searchIndex).toBeDefined();
+    });
+
+    it('Should contain createIndex method', () => {
+      expect(invertedIndex.createIndex).toBeDefined();
     });
   });
 
@@ -58,9 +62,9 @@ describe('InvertedIndex', () => {
       expect(invertedIndex.isFileValid(invalidJSONFile)).toEqual('Invalid File: JSON file Does not contain valid JSON object');
     });
 
-    it('Should return \'Malformed File: It the JSON file you passed in is out of shape. Please check again\' when a malformed File is passed', () => {
+    it('Should return \'Malformed File: The JSON file you passed in is out of shape. Please check again\' when a malformed File is passed', () => {
       const malformedJSONFile = fs.readFileSync('../fixures/malformedJSONFile.json').toString();
-      expect(invertedIndex.isFileValid(malformedJSONFile)).toString();
+      expect(invertedIndex.isFileValid(malformedJSONFile)).toBe('Malformed File: The JSON file you passed in is out of shape. Please check again');
     });
   });
 
