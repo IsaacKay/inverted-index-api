@@ -129,3 +129,25 @@ describe('InvertedIndex.createIndex', () => {
     expect(typeof invertedIndex.createIndex(malformedJSONFile)).toBe('string');
   });
 });
+
+describe('InvertedInde.searchIndex', () => {
+  const iIndex = new InvertedIndex();
+  iIndex.createIndex(validJSONFile);
+  it('Should return \'Please provide something to search\' when no argument is passed', () => {
+    expect(iIndex.searchIndex()).toBe('Please provide something to search');
+  });
+  it('Should return \'Please upload or choose a file first\' when you try to search without uploading or choosing any file', () => {
+    const iIndex1 = new InvertedIndex();
+    expect(iIndex1.searchIndex('to')).toBe('Please upload or choose a file first');
+  });
+  it('Should return correct result when file and index is available', () => {
+    expect(iIndex.searchIndex('to')).toEqual({ to: [0, 1] });
+    expect(iIndex.searchIndex('an')).toEqual({ an: [0] });
+  });
+  it('Should return an empty array when provided with a word not present in the index', () => {
+    expect(iIndex.searchIndex('glorify')).toEqual({ glorify: [] });
+  });
+  it('Should return an correct result when provided with multiple terms to search', () => {
+    expect(iIndex.searchIndex('an to')).toEqual({ to: [0, 1], an: [0] });
+  });
+});
