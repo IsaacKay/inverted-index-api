@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "gulp run-test"
   },
   "repository": {
     "type": "git",
@@ -27,7 +27,9 @@
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.3",
     "gulp": "^3.9.1",
+    "gulp-istanbul-report": "0.0.1",
     "gulp-jasmine": "^2.4.2",
+    "gulp-jasmine-node": "^1.0.7",
     "jasmine-node": "^1.14.5"
   }
 }
