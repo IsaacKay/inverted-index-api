@@ -52,6 +52,35 @@ class InvertedIndex {
     return this.books;
   }
 
+  createIndex(books) {
+    const has = Object.prototype.hasOwnProperty;
+    const readError = this.readFile(books).error;
+    const index = {};
+    if (readError) { // if file reading took place with error
+      return readError;
+    }
+    for (let i = 0; i < books.length; i += 1) {
+      const book = books[i];
+      // title of the book and replace extra spaces with a single space
+      let title = book.title.toLowerCase().replace(/\s\s+/g, ' ');
+      let text = book.text.toLowerCase().replace(/\s\s+/g, ' ');
+
+      // turn book content as to an array words
+      title = title.split(' ');
+      text = text.split(' ');
+      const bookContent = [...title, ...text];
+      for (let j = 0; j < bookContent.length; j += 1) {
+        const word = bookContent[j];
+        if (!has.call(index, word)) {
+          index[word] = [i];
+        } else if (index[word].indexOf(i) < 0) {
+          index[word].push(i);
+        }
+      }
+    }
+    this.index = index;
+    return index;
+  }
 }
 
 module.exports = { InvertedIndex };
