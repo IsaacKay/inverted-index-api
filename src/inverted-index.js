@@ -16,7 +16,7 @@ class InvertedIndex {
     } else {
       try {
         const stringifiedBooks = JSON.stringify(books);
-        JSON.parse(stringifiedBooks)
+        JSON.parse(stringifiedBooks);
         // check if it is an empty stringified JSON object
         if (!stringifiedBooks.replace(/"/g, '')) {
           this.validity = 'Empty File: The JSON File must not be empty';
@@ -81,6 +81,60 @@ class InvertedIndex {
     this.index = index;
     return index;
   }
+
+  searchIndex(...searchTerms) {
+    const index = this.index;
+    const searchResult = {};
+    const terms = InvertedIndex.flattenSearchTerms(searchTerms);
+    const errorMessage = this.validateSearch(terms);
+    if (errorMessage) {
+      return errorMessage;
+    }
+    terms.forEach((term) => {
+      const occurrence = index[term];
+      if (occurrence) {
+        searchResult[term] = occurrence;
+      } else {
+        searchResult[term] = [];
+      }
+    });
+    return searchResult;
+  }
+
+  static flattenSearchTerms(searchTerms = []) {
+    const terms = searchTerms;
+    let term = ''; // a term in searchTerms
+    for (let i = 0; i < terms.length; i += 1) {
+      term = terms[i];
+      /* the current term is an array remove it
+       * from the array and replace it with it's content
+       * instead. then go over the array again.
+       */
+      if (Array.isArray(term)) {
+        terms.splice(i, 1, ...term);
+        i = 0;
+      } else {
+        const splittedString = term.toString().replace(/\s\s+/g, ' ').split(' ');
+        if (splittedString.length > 1) {
+          terms.splice(i, 1, ...splittedString);
+          i = 0;
+        }
+      }
+    }
+    return terms;
+  }
+
+  validateSearch(searchTerms = []) {
+    console.log(this.index);
+    let errorMessage = '';
+    if (!searchTerms[0]) {
+      errorMessage = 'Please provide something to search';
+    } else if (!(this.index)) {
+      errorMessage = 'Please upload or choose a file first';
+    }
+    return errorMessage;
+  }
 }
+
 
 module.exports = { InvertedIndex };
