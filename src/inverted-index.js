@@ -159,7 +159,6 @@ class InvertedIndex {
     }
     return terms;
   }
-
   /**
    * @description This method checks if search can really take place or not
    * For example, a search cannot be created when no inedex has been created.
@@ -168,10 +167,13 @@ class InvertedIndex {
    * @returns {string} an error if an error occurred or an empty string if not
    */
   validateSearch(searchTerms = []) {
+    /* Object.keys(obj) returns an array ofkeys contained a javascript object
+     * it returns an empty array if the object is empty*/
+    const indexIsEmpty = !Object.keys(this.index)[0];
     let errorMessage = '';
     if (!searchTerms[0]) {
       errorMessage = 'Please provide something to search';
-    } else if (!(this.index)) {
+    } else if (indexIsEmpty) {
       errorMessage = 'Please upload or choose a file first';
     }
     return errorMessage;
