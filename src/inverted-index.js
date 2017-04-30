@@ -125,7 +125,6 @@ class InvertedIndex {
   }
 
   validateSearch(searchTerms = []) {
-    console.log(this.index);
     let errorMessage = '';
     if (!searchTerms[0]) {
       errorMessage = 'Please provide something to search';
