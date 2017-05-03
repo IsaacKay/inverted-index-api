@@ -12,8 +12,8 @@ class InvertedIndex {
     this.file = {};
   }
   /** @returns {object} books- the file content read */
-  getBooks() {
-    return this.books;
+  getFileContent() {
+    return this.file;
   }
   /**
    * @description It checks makes sure any file being uploaded is in good shape.
@@ -24,8 +24,8 @@ class InvertedIndex {
     */
   isFileValid(fileName, fileContent) {
     this.validity = true;
-    if (!fileName) {
-      this.validity = 'Please Specify a file name first';
+    if (!fileName || typeof fileName === 'boolean') {
+      this.validity = 'Please specify a file name';
     } else if (typeof fileName !== 'string') {
       this.validity = 'The first argument(fileName) a string';
     } else if (typeof fileName === 'string') {
@@ -33,40 +33,39 @@ class InvertedIndex {
       const ext = fileName.split('.').pop();
       if (ext !== 'JSON') {
         this.validity = 'File name must be a json file';
-      }
-    } else if (!fileContent) {
-      this.validity = 'Please provide a second argument (fileContent)';
-    } else if (Array.isArray(fileContent)) {
-      this.validity = 'The second object Argument must be an array of Objects';
-    } else {
-      try {
-        const stringifiedBooks = JSON.stringify(fileContent);
-        JSON.parse(stringifiedBooks);
-        // check if it is an empty stringified JSON object
-        if (!stringifiedBooks.replace(/"/g, '')) {
-          this.validity = 'Empty File: The JSON File must not be empty';
-        } else {
-          try {
-            fileContent.forEach((doc) => {
-              const keysLength = Object.keys(doc).length;
-
-              // if book contains more than 2 keys or  does not contain requred keys
-              if (keysLength > 2 || !doc.title || !doc.text) {
-                // break out of the for each
-                throw new Error('Malformed File');
+      } else if (!fileContent) {
+        this.validity = 'Please provide a second argument (fileContent)';
+      } else if (!Array.isArray(fileContent)) {
+        this.validity = 'The second object Argument must be an array of Objects';
+      } else {
+        try {
+          const stringifiedBooks = JSON.stringify(fileContent);
+          JSON.parse(stringifiedBooks);
+          // check if it is an empty stringified JSON object
+          if (!stringifiedBooks.replace(/"/g, '')) {
+            this.validity = 'Empty File: The JSON File must not be empty';
+          } else {
+            try {
+              fileContent.forEach((doc) => {
+                const keysLength = Object.keys(doc).length;
+                // if book contains more than 2 keys or  does not contain requred keys
+                if (keysLength > 2 || !doc.title || !doc.text) {
+                  // break out of the for each
+                  throw new Error('Malformed File');
+                }
+              });
+              // get the number of keys in books
+            } catch (error) {
+              if (error.message.toLowerCase() === 'malformed file') {
+                this.validity = 'Malformed File: The JSON file you passed in is out of shape. Please check again';
+              } else {
+                throw error;
               }
-            });
-            // get the number of keys in books
-          } catch (error) {
-            if (error.message.toLowerCase() === 'malformed file') {
-              this.validity = 'Malformed File: The JSON file you passed in is out of shape. Please check again';
-            } else {
-              throw error;
             }
           }
+        } catch (error) {
+          this.validity = 'Invalid File: JSON file Does not contain valid JSON object';
         }
-      } catch (error) {
-        this.validity = 'Invalid File: JSON file Does not contain valid JSON object';
       }
     }
     return this.validity;
@@ -93,7 +92,8 @@ class InvertedIndex {
    * @description This methods takes in file content. It should not be called until
    * a file has been uploeaded successfully
    * @returns {object} An object containing keys and corresponding indexes
-   * @param {string} fileName - The name of the source file. 
+   * @param {string} fileName - The name of the source file. Expected to be a
+   * JSON file
    * @param {fileContent} fileContent -An array of javascript content
    */
   createIndex(fileName, fileContent) {
@@ -127,26 +127,27 @@ class InvertedIndex {
 
       docNumber += 1;
     });
-    this.index = { fileName: index };
-    return index;
+    this.index[fileName] = index;
+    return this.index;
   }
   /**
    * @description This method first flattens nested arrays if provided.
    * it break strings down into an array of words  then searches for each
    * words in  the array. Then returns a map of each word and it occurrence.
-   * @param {string|array} searchTerms - An array or string containing
+   * @param {object} index - The index to search
+   * @param {string} fileName - String representing fileName
+   * @param {string|array} terms - An array or string containing
    * search terms
    * @returns {object} - An containing keys and position in the file
    */
-  searchIndex(...searchTerms) {
-    const index = this.index;
+  searchIndex(index, fileName, ...terms) {
     const searchResult = {};
-    const terms = InvertedIndex.flattenSearchTerms(searchTerms);
-    const errorMessage = this.validateSearch(terms);
+    const errorMessage = this.validateSearch(index, fileName, terms);
     if (errorMessage) {
       return errorMessage;
     }
-    terms.forEach((term) => {
+    const searchTerms = InvertedIndex.flattenSearchTerms(terms);
+    searchTerms.forEach((term) => {
       const occurrence = index[term];
       if (occurrence) {
         searchResult[term] = occurrence;
@@ -185,15 +186,30 @@ class InvertedIndex {
    * @description This method checks if search can really take place or not
    * For example, a search cannot be created when no inedex has been created.
    * this method is used by searchIndex()
+   * @param {object} index - index passed in from searchIndex method
+   * @param {string} fileName - name of file being searched
    * @param {array} searchTerms an array of search terms
    * @returns {string} an error if an error occurred or an empty string if not
    */
-  validateSearch(searchTerms = []) {
-    /* Object.keys(obj) returns an array ofkeys contained a javascript object
-     * it returns an empty array if the object is empty*/
+  validateSearch(index, fileName, searchTerms) {
     const indexIsEmpty = !Object.keys(this.index)[0];
     let errorMessage = '';
-    if (!searchTerms[0]) {
+    if (!index) {
+      errorMessage = 'Please create an index first';
+    } else if (typeof index !== 'object') {
+      errorMessage = 'The index you provided is invalid';
+    } else if (!fileName) {
+      errorMessage = 'Please specify the name of the file you want to process';
+    } else if (typeof fileName !== 'string') {
+      errorMessage = 'The second argument should be file name';
+    } else if (typeof fileName === 'string') {
+      const ext = fileName.toLowerCase().split('.').pop();
+      if (ext !== 'json') {
+        errorMessage = 'The file you\'re tryinig to check should be a json file';
+      }
+    } else if (!Array.isArray(searchTerms) && typeof searchTerm !== 'string') {
+      errorMessage = 'The search terms must be array or string';
+    } else if (!searchTerms[0]) {
       errorMessage = 'Please provide something to search';
     } else if (indexIsEmpty) {
       errorMessage = 'Please upload or choose a file first';
