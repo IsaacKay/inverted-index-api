@@ -1,11 +1,14 @@
 /* eslint no-undef: 0 */
 // require sample files
-const fs = require('fs');
-const path = require('path');
-const emptyJSONFile = require('../fixures/emptyJSONFile.json'),
-  validJSONFile = require('../fixures/validFile.json'),
-  malformedJSONFile = require('../fixures/malformedJSONFile.json');
-const InvertedIndex = require('../src/inverted-index.js').InvertedIndex;
+import fs from 'fs';
+import path from 'path';
+import emptyJSONFile from '../fixures/emptyJSONFile.json';
+import validJSONFile from '../fixures/validFile.json';
+import malformedJSONFile from '../fixures/malformedJSONFile.json';
+import inIndex from '../src/inverted-index';
+
+const InvertedIndex = inIndex.InvertedIndex;
+
 
 
 // cannot require bad json file so i used fs.readFileSync instead
