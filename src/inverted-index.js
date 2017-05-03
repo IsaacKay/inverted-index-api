@@ -22,28 +22,46 @@ class InvertedIndex {
    * @param {object|string} books - representing file content or a stringified version
    * of file content.
     */
-  isFileValid(books) {
+  isFileValid(fileName, fileContent) {
     this.validity = true;
-    if (!books || books === true) {
-      this.validity = 'Invalid File: File must be a real JSON file';
+    if (!fileName) {
+      this.validity = 'Please Specify a file name first';
+    } else if (typeof fileName !== 'string') {
+      this.validity = 'The first argument(fileName) a string';
+    } else if (typeof fileName === 'string') {
+      // check for file extension
+      const ext = fileName.split('.').pop();
+      if (ext !== 'JSON') {
+        this.validity = 'File name must be a json file';
+      }
+    } else if (!fileContent) {
+      this.validity = 'Please provide a second argument (fileContent)';
+    } else if (Array.isArray(fileContent)) {
+      this.validity = 'The second object Argument must be an array of Objects';
     } else {
       try {
-        const stringifiedBooks = JSON.stringify(books);
+        const stringifiedBooks = JSON.stringify(fileContent);
         JSON.parse(stringifiedBooks);
         // check if it is an empty stringified JSON object
         if (!stringifiedBooks.replace(/"/g, '')) {
           this.validity = 'Empty File: The JSON File must not be empty';
         } else {
-          for (let i = 0; i < books.length; i += 1) {
-            const book = books[i];
-            // get the number of keys in books
-            const keysLength = Object.keys(book).length;
+          try {
+            fileContent.forEach((doc) => {
+              const keysLength = Object.keys(doc).length;
 
-            /* book is malformed if it contains more than 1 key
-             * or if it does not cointain the title and text*/
-            if (keysLength > 2 || !book.title || !book.text) {
+              // if book contains more than 2 keys or  does not contain requred keys
+              if (keysLength > 2 || !doc.title || !doc.text) {
+                // break out of the for each
+                throw new Error('Malformed File');
+              }
+            });
+            // get the number of keys in books
+          } catch (error) {
+            if (error.message.toLowerCase() === 'malformed file') {
               this.validity = 'Malformed File: The JSON file you passed in is out of shape. Please check again';
-              break;
+            } else {
+              throw error;
             }
           }
         }
@@ -58,10 +76,11 @@ class InvertedIndex {
    * before reading book
    * @returns {object} object containing an error message if
    * an error occurs while reading file and  file content
-   * @param {string|object} books reperesent file content
+   * @param {string} fileName - Represents the name of the file being read
+   * @param {object} fileContent - Represents the content of the file
    */
-  readFile(books) {
-    const validity = this.isFileValid(books);
+  readFile(fileName, fileContent) {
+    const validity = this.isFileValid(fileName, fileContent);
     if (validity === true) {
       this.books = { error: '', books };
     } else {
