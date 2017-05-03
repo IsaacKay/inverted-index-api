@@ -128,7 +128,7 @@ class InvertedIndex {
       docNumber += 1;
     });
     this.index = { fileName: index };
-    return this.index;
+    return index;
   }
   /**
    * @description This method first flattens nested arrays if provided.
@@ -168,12 +168,9 @@ class InvertedIndex {
     let term = ''; // a term in searchTerms
     for (let i = 0; i < terms.length; i += 1) {
       term = terms[i];
-      /* the current term is an array remove it
-       * from the array and replace it with it's content
-       * instead. then go over the array again.*/
       if (Array.isArray(term)) {
-        terms.splice(i, 1, ...term);
-        i = 0;
+        terms.splice(i, 1, ...term); // flatten terms
+        i -= 1; // step back one step
       } else {
         const splittedString = term.toString().replace(/\s\s+/g, ' ').split(' ');
         if (splittedString.length > 1) {
