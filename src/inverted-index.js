@@ -9,7 +9,7 @@ class InvertedIndex {
   constructor() {
     this.index = {};
     /** @private */
-    this.books = {};
+    this.file = {};
   }
   /** @returns {object} books- the file content read */
   getBooks() {
@@ -19,8 +19,8 @@ class InvertedIndex {
    * @description It checks makes sure any file being uploaded is in good shape.
    * This method is used by readFile(_);
    * @returns {string|boolean} True when file if in good shape|Error string if not
-   * @param {object|string} books - representing file content or a stringified version
-   * of file content.
+   * @param {string} fileName - Represents the name of the file being processed
+   * @param {object} fileContent - Represents the content of the file being passed in.
     */
   isFileValid(fileName, fileContent) {
     this.validity = true;
@@ -82,47 +82,53 @@ class InvertedIndex {
   readFile(fileName, fileContent) {
     const validity = this.isFileValid(fileName, fileContent);
     if (validity === true) {
-      this.books = { error: '', books };
+      this.file = { fileName, fileContent, error: '' };
     } else {
-      this.books = { error: validity, books: [] };
+      this.file = { error: validity, fileContent: [], fileName };
     }
-    return this.books;
+    return this.file;
   }
 
   /**
    * @description This methods takes in file content. It should not be called until
    * a file has been uploeaded successfully
    * @returns {object} An object containing keys and corresponding indexes
-   * @param {object} books - uploaded file content
+   * @param {string} fileName - The name of the source file. 
+   * @param {fileContent} fileContent -An array of javascript content
    */
-  createIndex(books) {
+  createIndex(fileName, fileContent) {
     const has = Object.prototype.hasOwnProperty;
-    const readError = this.readFile(books).error;
+    const readError = this.readFile(fileName, fileContent).error;
     const index = {};
     if (readError) { // if file reading took place with error
       return readError;
     }
-    for (let i = 0; i < books.length; i += 1) {
-      const book = books[i];
-      // title of the book and replace extra spaces with a single space
-      let title = book.title.toLowerCase().replace(/\s\s+/g, ' ');
-      let text = book.text.toLowerCase().replace(/\s\s+/g, ' ');
+
+    const docs = fileContent;
+    let docNumber = 0;
+    docs.forEach((doc) => {
+      // title of the doc and replace extra spaces with a single space
+      let title = doc.title.toLowerCase().replace(/\s\s+/g, ' ');
+      let text = doc.text.toLowerCase().replace(/\s\s+/g, ' ');
 
       // turn book content as to an array words
       title = title.split(' ');
       text = text.split(' ');
-      const bookContent = [...title, ...text];
-      for (let j = 0; j < bookContent.length; j += 1) {
-        const word = bookContent[j];
+
+      // combine both title and text into one array
+      const docContent = [...title, ...text];
+      docContent.forEach((word) => {
         if (!has.call(index, word)) {
-          index[word] = [i];
-        } else if (index[word].indexOf(i) < 0) {
-          index[word].push(i);
+          index[word] = [docNumber];
+        } else if (index[word].indexOf(docNumber) < 0) {
+          index[word].push(docNumber);
         }
-      }
-    }
-    this.index = index;
-    return index;
+      });
+
+      docNumber += 1;
+    });
+    this.index = { fileName: index };
+    return this.index;
   }
   /**
    * @description This method first flattens nested arrays if provided.
