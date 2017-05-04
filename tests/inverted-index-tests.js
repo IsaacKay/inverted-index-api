@@ -16,8 +16,6 @@ const invalidJSONFile = fs.readFileSync(
   , 'utf-8')
   .toString();
 const invertedIndex = new InvertedIndex();
-
-
 describe('InvertedIndex', () => {
   // this suit makes sure that Inverted index contains the required class
   describe('Correctness of InvertedIndexClass', () => {
