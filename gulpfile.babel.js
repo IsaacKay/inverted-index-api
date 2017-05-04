@@ -31,12 +31,14 @@ gulp.task('pre-test', () => {
 });
 
 gulp.task('run-test', ['pre-test'], () => {
-  return gulp.src(['tests/inverted-index-tests.js'])
-    .pipe(jasmine())
+  const stream = gulp.src(['tests/inverted-index-tests.js'])
+    .pipe(jasmine({ includeStackTrace: true }))
     .pipe(istanbul.writeReports({ dir: './coverage' }));
+  return stream;
 });
 gulp.task('coverage', ['run-test'], () => {
-  gulp.src('test/coverage/**/lcov.info')
+  const stream = gulp.src('test/coverage/**/lcov.info')
     .pipe(coveralls())
     .pipe(istanbulReport());
+  return stream;
 });

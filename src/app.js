@@ -4,7 +4,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import iIndex from './inverted-index';
 
-const InvertedIndex = new iIndex.InvertedIndex();
+const InvertedIndex = iIndex.InvertedIndex;
 dotenv.config();
 
 const NODE_ENV = process.env.NODE_ENV;
@@ -21,17 +21,23 @@ if (NODE_ENV === 'PROD') {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 let invertedIndex;
+let index;
 
 app.post('/api/create', (req, res) => {
+  const body = req.body;
+  const fileName = Object.keys(body).pop();
+  const fileContent = Object.values(body).pop();
   invertedIndex = new InvertedIndex();
-  const index = invertedIndex.createIndex(JSON.parse(req.body.book));
+  index = invertedIndex.createIndex(fileName, fileContent);
   res.json(index);
 });
 
 app.post('/api/search', (req, res) => {
-  const searchTerms = req.body.searchTerms;
-  const tokens = invertedIndex.searchIndex(searchTerms);
-  res.json(tokens);
+  const body = req.body;
+  const fileName = Object.keys(body).pop();
+  const searchTerms = Object.values(body).pop();
+  const searchResult = invertedIndex.searchIndex(index, fileName, searchTerms);
+  res.json(searchResult);
 });
 
 const port = app.get('PORT');
