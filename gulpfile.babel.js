@@ -32,7 +32,7 @@ gulp.task('pre-test', () => {
 
 gulp.task('run-test', ['pre-test'], () => {
   const stream = gulp.src(['tests/inverted-index-tests.js'])
-    .pipe(jasmine({includeStackTrace: true }))
+    .pipe(jasmine({ includeStackTrace: true }))
     .pipe(istanbul.writeReports({ dir: './coverage' }));
   return stream;
 });
