@@ -24,7 +24,6 @@ let invertedIndex;
 
 app.post('/api/create', (req, res) => {
   invertedIndex = new InvertedIndex();
-  console.log(req.body)
   const index = invertedIndex.createIndex(JSON.parse(req.body.book));
   res.json(index);
 });
