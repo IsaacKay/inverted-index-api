@@ -4,7 +4,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import iIndex from './inverted-index';
 
-const InvertedIndex = new iIndex.InvertedIndex();
+const InvertedIndex = iIndex.InvertedIndex;
 dotenv.config();
 
 const NODE_ENV = process.env.NODE_ENV;
@@ -24,6 +24,7 @@ let invertedIndex;
 
 app.post('/api/create', (req, res) => {
   invertedIndex = new InvertedIndex();
+  console.log(req.body)
   const index = invertedIndex.createIndex(JSON.parse(req.body.book));
   res.json(index);
 });
