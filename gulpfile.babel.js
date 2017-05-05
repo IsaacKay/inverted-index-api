@@ -1,6 +1,5 @@
 import gulp from 'gulp';
 import istanbul from 'gulp-babel-istanbul';
-import istanbulReport from 'gulp-istanbul-report';
 import jasmine from 'gulp-jasmine-node';
 import babel from 'gulp-babel';
 import nodemon from 'gulp-nodemon';
