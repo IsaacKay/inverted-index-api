@@ -194,9 +194,6 @@ class InvertedIndex {
    * @returns {string} an error if an error occurred or an empty string if not
    */
   validateSearch(index, fileName, searchTerms) {
-    // console.log(index)
-    // console.log(fileName);
-    // console.log(searchTerms);
     const indexIsEmpty = !Object.keys(this.index)[0];
     let errorMessage = '';
     if (!index) {
