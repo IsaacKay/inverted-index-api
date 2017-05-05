@@ -133,15 +133,12 @@ describe('InvertedIndex.createIndex', () => {
 describe('InvertedIndex.searchIndex', () => {
   const iIndex = new InvertedIndex();
   iIndex.createIndex('validJSONFile.json', validJSONFile);
-  it('Should return \'Please provide something to search\' when no argument is passed', () => {
+  it('Should return \'Please create an index first\' when no argument is passed', () => {
     expect(iIndex.searchIndex()).toBe('Please create an index first');
   });
-  it('Should return \'Please upload or choose a file first\' when you try to search without uploading or choosing any file', () => {
+  it('Should return \'The index you provided is invalid\' when you try to search without uploading or choosing any file', () => {
     const iIndex1 = new InvertedIndex();
     expect(iIndex1.searchIndex('to')).toBe('The index you provided is invalid');
-  });
-  it('Should return \'Please create an index first\' when no argument is passed', () => {
-    expect(iIndex.searchIndex()).toEqual('Please create an index first');
   });
   it('Should return \'The index you provided is invalid\' when the argument passed is not an object', () => {
     expect(iIndex.searchIndex('an')).toEqual('The index you provided is invalid');
