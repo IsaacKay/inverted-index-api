@@ -194,12 +194,17 @@ class InvertedIndex {
    * @returns {string} an error if an error occurred or an empty string if not
    */
   validateSearch(index, fileName, searchTerms) {
+    // console.log(index)
+    // console.log(fileName);
+    // console.log(searchTerms);
     const indexIsEmpty = !Object.keys(this.index)[0];
     let errorMessage = '';
     if (!index) {
       errorMessage = 'Please create an index first';
     } else if (typeof index !== 'object') {
       errorMessage = 'The index you provided is invalid';
+    } else if (indexIsEmpty) {
+      errorMessage = 'Please upload or choose a file first';
     } else if (!fileName) {
       errorMessage = 'Please specify the name of the file you want to process';
     } else if (typeof fileName !== 'string') {
@@ -208,17 +213,12 @@ class InvertedIndex {
       const ext = fileName.toLowerCase().split('.').pop();
       if (ext !== 'json') {
         errorMessage = 'The file you\'re tryinig to check should be a json file';
+      } else if (!searchTerms || !searchTerms[0]) {
+        errorMessage = 'Please provide something to search';
       }
-    } else if (!Array.isArray(searchTerms) && typeof searchTerm !== 'string') {
-      errorMessage = 'The search terms must be array or string';
-    } else if (!searchTerms[0]) {
-      errorMessage = 'Please provide something to search';
-    } else if (indexIsEmpty) {
-      errorMessage = 'Please upload or choose a file first';
     }
     return errorMessage;
   }
 }
-
 
 module.exports = { InvertedIndex };
