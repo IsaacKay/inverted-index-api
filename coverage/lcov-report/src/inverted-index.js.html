@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/inverted-index.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">src/</a> inverted-index.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">71.08% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>59/83</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">60% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>18/30</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">81.82% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>9/11</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">71.6% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>58/81</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13×</span>
+<span class="cline-any cline-yes">13×</span>
+<span class="cline-any cline-yes">13×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">68×</span>
+<span class="cline-any cline-yes">44×</span>
+<span class="cline-any cline-yes">24×</span>
+<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import CreateIndexValidator from './create-index-validator';
+import SearchIndexValidator from './search-index-validator';
+&nbsp;
+/** InvertedIndex is a class representing a computer science concept
+ *  where the content of a file in mapped to it's position in data base
+ *  Or in this case, a JSON array.
+ */
+export default class InvertedIndex {
+  /**
+   * Initializes needed variables
+   */
+  constructor() {
+    this.index = {};
+    /** @private */
+    this.file = {};
+  }
+  /** @returns {object} books- the file content read */
+  getFileContent() {
+    return this.file;
+  }
+  /**
+   * @description It checks makes sure any file being uploaded is in good shape.
+   * This method is used by readFile(_);
+   * @returns {string|boolean} True when file if in good shape|Error string if not
+   * @param {string} fileName - Represents the name of the file being processed
+   * @param {object} fileContent - Represents the content of the file being passed in.
+    */
+  isFileValid(fileName, fileContent) {
+    this.validity = true;
+    let error = CreateIndexValidator.checkFileName(fileName);
+    if (error) {
+      this.validity = error;
+      return this.validity;
+    }
+&nbsp;
+    error = CreateIndexValidator.checkFileContent(fileContent);
+    if (error) {
+      this.validity = error;
+      return this.validity;
+    }
+&nbsp;
+    return this.validity;
+  }
+  /**
+   * @description This method uses isFileValid() method to validate file
+   * before reading book
+   * @returns {object} object containing an error message if
+   * an error occurs while reading file and  file content
+   * @param {string} fileName - Represents the name of the file being read
+   * @param {object} fileContent - Represents the content of the file
+   */
+  readFile(fileName, fileContent) {
+    const validity = this.isFileValid(fileName, fileContent);
+    if (validity === true) {
+      this.file = { fileName, fileContent, error: '' };
+    } else {
+      this.file = { error: validity, fileContent: [], fileName };
+    }
+    return this.file;
+  }
+&nbsp;
+  /**
+   * @description This methods takes in file content. It should not be called until
+   * a file has been uploeaded successfully
+   * @returns {object} An object containing keys and corresponding indexes
+   * @param {string} fileName - The name of the source file. Expected to be a
+   * JSON file
+   * @param {fileContent} fileContent -An array of javascript content
+   */
+  createIndex(fileName, fileContent) {
+    const has = Object.prototype.hasOwnProperty;
+    const readError = this.readFile(fileName, fileContent).error;
+    const index = {};
+    if (readError) { // if file reading took place with error
+      return readError;
+    }
+&nbsp;
+    const docs = fileContent;
+    let docNumber = 0;
+    docs.forEach((doc) =&gt; {
+      // title of the doc and replace extra spaces with a single space
+      let title = doc.title.toLowerCase().replace(/\s\s+/g, ' ');
+      let text = doc.text.toLowerCase().replace(/\s\s+/g, ' ');
+&nbsp;
+      // turn book content as to an array words
+      title = title.split(' ');
+      text = text.split(' ');
+&nbsp;
+      // combine both title and text into one array
+      const docContent = [...title, ...text];
+      docContent.forEach((word) =&gt; {
+        if (!has.call(index, word)) {
+          index[word] = [docNumber];
+        } else if (index[word].indexOf(docNumber) &lt; 0) {
+          index[word].push(docNumber);
+        }
+      });
+&nbsp;
+      docNumber += 1;
+    });
+    this.index[fileName] = index;
+    return this.index;
+  }
+  /**
+   * @description This method first flattens nested arrays if provided.
+   * it break strings down into an array of words  then searches for each
+   * words in  the array. Then returns a map of each word and it occurrence.
+   * @param {object} index - The index to search
+   * @param {string} fileName - String representing fileName
+   * @param {string|array} terms - An array or string containing
+   * search terms
+   * @returns {object} - An containing keys and position in the file
+   */
+  searchIndex(index, fileName, ...terms) <span class="cstat-no" title="statement not covered" >{</span>
+    const searchResult = {};
+    const errorMessage = this.validateSearch(index, fileName, terms);
+    if (<span class="missing-if-branch" title="else path not taken" >E</span>errorMessage) {
+      return errorMessage;
+    }
+    const <span class="cstat-no" title="statement not covered" >searchTerms = InvertedIndex.flattenSearchTerms(terms);</span>
+    const <span class="cstat-no" title="statement not covered" >indexContent = index[fileName];</span>
+    searchTerms.<span class="cstat-no" title="statement not covered" >forEach(<span class="fstat-no" title="function not covered" >(term) =&gt; {</span></span>
+      const <span class="cstat-no" title="statement not covered" >occurrence = indexContent[term];</span>
+      if (<span class="cstat-no" title="statement not covered" >occurrence) {</span>
+        searchResult[<span class="cstat-no" title="statement not covered" >term] = occurrence;</span>
+      } else {
+        searchResult[<span class="cstat-no" title="statement not covered" >term] = [];</span>
+      }
+    });
+    return <span class="cstat-no" title="statement not covered" >searchResult;</span>
+  }
+  /**
+   * @description  This method is used by searchIndex() to flatten the an array of search terms
+   * I.e if provided with [1,2,4,[5,6,7],8,9], it should return [1,2,3,4,5,6,7,8,9]
+   * @static
+   * @param {array} searchTerms - An array of search terms
+   * @returns {array} - flattend version of the paramenter
+   */
+  static flattenSearchTerms(<span class="cstat-no" title="statement not covered" >searchTerms = []) <span class="fstat-no" title="function not covered" >{</span></span>
+    const <span class="cstat-no" title="statement not covered" >terms = searchTerms;</span>
+    let <span class="cstat-no" title="statement not covered" >term = ''; // a term in searchTerms</span>
+    for (<span class="cstat-no" title="statement not covered" >let i = 0; i &lt; terms.length; i += 1) {</span>
+      term = <span class="cstat-no" title="statement not covered" >terms[i];</span>
+      if (<span class="cstat-no" title="statement not covered" >Array.isArray(term)) {</span>
+        terms.<span class="cstat-no" title="statement not covered" >splice(i, 1, ...term); // flatten terms</span>
+        i = <span class="cstat-no" title="statement not covered" >0; // step back one step</span>
+      } else {
+        const <span class="cstat-no" title="statement not covered" >strippedString = term.toLowerCase().replace(/\s\s+/g, ' ');</span>
+        const <span class="cstat-no" title="statement not covered" >splittedString = strippedString.replace(/[^0-9a-z\s]/gi, '').split(' ');</span>
+        if (<span class="cstat-no" title="statement not covered" >splittedString.length &gt; 1) {</span>
+          terms.<span class="cstat-no" title="statement not covered" >splice(i, 1, ...splittedString);</span>
+          i = <span class="cstat-no" title="statement not covered" >0;</span>
+        }
+      }
+    }
+    return <span class="cstat-no" title="statement not covered" >terms;</span>
+  }
+  /**
+   * @description This method checks if search can really take place or not
+   * For example, a search cannot be created when no inedex has been created.
+   * this method is used by searchIndex()
+   * @param {object} index - index passed in from searchIndex method
+   * @param {string} fileName - name of file being searched
+   * @param {array} searchTerms an array of search terms
+   * @returns {string} an error if an error occurred or an empty string if not
+   */
+  validateSearch(index, fileName, searchTerms) {
+    this.errorMessage = '';
+    this.errorMessage = SearchIndexValidator.checkIndex(index);
+    if (this.errorMessage) {
+      return this.errorMessage;
+    }
+    this.errorMessage = SearchIndexValidator.checkFileName(fileName);
+    if (this.errorMessage) {
+      return this.errorMessage;
+    }
+    this.errorMessage = SearchIndexValidator.checkSearchTerms(searchTerms);
+    if (<span class="missing-if-branch" title="else path not taken" >E</span>this.errorMessage) {
+      return this.errorMessage;
+    }
+    return <span class="cstat-no" title="statement not covered" >this.errorMessage;</span>
+  }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri May 05 2017 16:33:15 GMT+0100 (WAT)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

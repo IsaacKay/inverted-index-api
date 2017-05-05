@@ -5,9 +5,8 @@ import path from 'path';
 import emptyJSONFile from '../fixures/emptyJSONFile.json';
 import validJSONFile from '../fixures/validFile.json';
 import malformedJSONFile from '../fixures/malformedJSONFile.json';
-import inIndex from '../src/inverted-index';
+import InvertedIndex from '../src/inverted-index';
 
-const InvertedIndex = inIndex.InvertedIndex;
 
 // cannot require bad json file so i used fs.readFileSync instead
 const invalidJSONFile = fs.readFileSync(
@@ -133,16 +132,23 @@ describe('InvertedIndex.createIndex', () => {
 
 describe('InvertedIndex.searchIndex', () => {
   const iIndex = new InvertedIndex();
-  iIndex.createIndex(validJSONFile);
-  it('Should return \'Please provide something to search\' when no argument is passed', () => {
+  iIndex.createIndex('validJSONFile.json', validJSONFile);
+  it('Should return \'Please create an index first\' when no argument is passed', () => {
     expect(iIndex.searchIndex()).toBe('Please create an index first');
   });
-  it('Should return \'Please upload or choose a file first\' when you try to search without uploading or choosing any file', () => {
+  it('Should return \'The index you provided is invalid\' when you try to search without uploading or choosing any file', () => {
     const iIndex1 = new InvertedIndex();
     expect(iIndex1.searchIndex('to')).toBe('The index you provided is invalid');
   });
-  it('Should return correct result when file and index is available', () => {
-    expect(iIndex.searchIndex()).toEqual('Please create an index first');
+  it('Should return \'The index you provided is invalid\' when the argument passed is not an object', () => {
     expect(iIndex.searchIndex('an')).toEqual('The index you provided is invalid');
+  });
+
+  it('Should return \'Please specify the name of the file you want to process\' when no file name is specified', () => {
+    expect(iIndex.searchIndex(iIndex.index)).toBe('Please specify the name of the file you want to process');
+  });
+
+  it('Should return \'Please provide something to search\' when no search term is passed in', () => {
+    expect(iIndex.searchIndex(iIndex.index, 'validJSONFile.JSON')).toBe('Please provide something to search');
   });
 });

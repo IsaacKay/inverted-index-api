@@ -1,11 +1,11 @@
 import gulp from 'gulp';
-import istanbul from 'gulp-istanbul';
-import istanbulReport from 'gulp-istanbul-report';
+import istanbul from 'gulp-babel-istanbul';
 import jasmine from 'gulp-jasmine-node';
 import babel from 'gulp-babel';
 import nodemon from 'gulp-nodemon';
 import minify from 'gulp-babel-minify';
 import coveralls from 'gulp-coveralls';
+import injectModules from 'gulp-inject-modules';
 
 gulp.task('compile-sources', () => {
   const stream = gulp.src(['./src/*.js'])
@@ -23,22 +23,30 @@ gulp.task('serve', ['compile-sources'], () => {
   });
   return stream;
 });
-gulp.task('pre-test', () => {
-  const stream = gulp.src(['./src/inverted-index.js'])
-    .pipe(istanbul())
-    .pipe(istanbul.hookRequire());
+
+gulp.task('run-test', () => {
+  const stream = gulp.src(['tests/inverted-index-tests.js'])
+    .pipe(babel())
+    .pipe(injectModules())
+    .pipe(jasmine({ includeStackTrace: true, color: true }))
   return stream;
 });
 
-gulp.task('run-test', ['pre-test'], () => {
-  const stream = gulp.src(['tests/inverted-index-tests.js'])
-    .pipe(jasmine({ includeStackTrace: true }))
-    .pipe(istanbul.writeReports({ dir: './coverage' }));
-  return stream;
-});
-gulp.task('coverage', ['run-test'], () => {
-  const stream = gulp.src('test/coverage/**/lcov.info')
-    .pipe(coveralls())
-    .pipe(istanbulReport());
-  return stream;
+
+gulp.task('coverage', () => {
+  gulp.src(['src/*.js', '/app.js'])
+    .pipe(istanbul())
+    .pipe(istanbul.hookRequire())
+    .on('finish', () => {
+      gulp.src('tests/inverted-index-tests.js')
+      .pipe(babel())
+      .pipe(injectModules())
+      .pipe(jasmine())
+      .pipe(istanbul.writeReports())
+      .pipe(istanbul.enforceThresholds({ thresholds: { global: 30 } }))
+      .on('end', () => {
+        gulp.src('coverage/lcov.info')
+        .pipe(coveralls());
+      });
+    });
 });
