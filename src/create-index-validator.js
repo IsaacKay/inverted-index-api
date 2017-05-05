@@ -95,3 +95,4 @@ export default class CreateIndexValidator {
     return error;
   }
 }
+

@@ -5,9 +5,8 @@ import path from 'path';
 import emptyJSONFile from '../fixures/emptyJSONFile.json';
 import validJSONFile from '../fixures/validFile.json';
 import malformedJSONFile from '../fixures/malformedJSONFile.json';
-import inIndex from '../src/inverted-index';
+import InvertedIndex from '../src/inverted-index';
 
-const InvertedIndex = inIndex.InvertedIndex;
 
 // cannot require bad json file so i used fs.readFileSync instead
 const invalidJSONFile = fs.readFileSync(

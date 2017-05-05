@@ -2,9 +2,8 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import bodyParser from 'body-parser';
-import iIndex from './inverted-index';
+import InvertedIndex from './inverted-index';
 
-const InvertedIndex = iIndex.InvertedIndex;
 dotenv.config();
 
 const NODE_ENV = process.env.NODE_ENV;
