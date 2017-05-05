@@ -165,40 +165,19 @@ export default class InvertedIndex {
    * @returns {string} an error if an error occurred or an empty string if not
    */
   validateSearch(index, fileName, searchTerms) {
-    // const indexIsEmpty = !Object.keys(this.index)[0];
-    // let errorMessage = '';
-    // if (!index) {
-    //   errorMessage = 'Please create an index first';
-    // } else if (typeof index !== 'object') {
-    //   errorMessage = 'The index you provided is invalid';
-    // } else if (indexIsEmpty) {
-    //   errorMessage = 'Please upload or choose a file first';
-    // } else if (!fileName) {
-    //   errorMessage = 'Please specify the name of the file you want to process';
-    // } else if (typeof fileName !== 'string') {
-    //   errorMessage = 'The second argument should be file name';
-    // } else if (typeof fileName === 'string') {
-    //   const ext = fileName.toLowerCase().split('.').pop();
-    //   if (ext !== 'json') {
-    //     errorMessage = 'The file you\'re tryinig to check should be a json file';
-    //   } else if (!searchTerms || !searchTerms[0]) {
-    //     errorMessage = 'Please provide something to search';
-    //   }
-    // }
-    // return errorMessage;
-    let errorMessage = '';
-    errorMessage = SearchIndexValidator.checkIndex(index);
-    if (errorMessage) {
-      return errorMessage;
+    this.errorMessage = '';
+    this.errorMessage = SearchIndexValidator.checkIndex(index);
+    if (this.errorMessage) {
+      return this.errorMessage;
     }
-    errorMessage = SearchIndexValidator.checkFileName(fileName);
-    if (errorMessage) {
-      return errorMessage;
+    this.errorMessage = SearchIndexValidator.checkFileName(fileName);
+    if (this.errorMessage) {
+      return this.errorMessage;
     }
-    errorMessage = SearchIndexValidator.checkSearchTerms(searchTerms);
-    if (errorMessage) {
-      return errorMessage;
+    this.errorMessage = SearchIndexValidator.checkSearchTerms(searchTerms);
+    if (this.errorMessage) {
+      return this.errorMessage;
     }
-    return errorMessage;
+    return this.errorMessage;
   }
 }
