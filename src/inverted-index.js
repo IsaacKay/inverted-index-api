@@ -1,8 +1,10 @@
+import CreateIndexValidator from './create-index-validator';
+
 /** InvertedIndex is a class representing a computer science concept
  *  where the content of a file in mapped to it's position in data base
  *  Or in this case, a JSON array.
  */
-class InvertedIndex {
+export default class InvertedIndex {
   /**
    * Initializes needed variables
    */
@@ -24,50 +26,18 @@ class InvertedIndex {
     */
   isFileValid(fileName, fileContent) {
     this.validity = true;
-    if (!fileName || typeof fileName === 'boolean') {
-      this.validity = 'Please specify a file name';
-    } else if (typeof fileName !== 'string') {
-      this.validity = 'The first argument(fileName) a string';
-    } else if (typeof fileName === 'string') {
-      // check for file extension
-      const ext = fileName.toLowerCase().split('.').pop();
-      if (ext !== 'json') {
-        this.validity = 'File name must be a json file';
-      } else if (!fileContent) {
-        this.validity = 'Please provide a second argument (fileContent)';
-      } else if (!Array.isArray(fileContent)) {
-        this.validity = 'The second object Argument must be an array of Objects';
-      } else {
-        try {
-          const stringifiedBooks = JSON.stringify(fileContent);
-          JSON.parse(stringifiedBooks);
-          // check if it is an empty stringified JSON object
-          if (!stringifiedBooks.replace(/"/g, '')) {
-            this.validity = 'Empty File: The JSON File must not be empty';
-          } else {
-            try {
-              fileContent.forEach((doc) => {
-                const keysLength = Object.keys(doc).length;
-                // if book contains more than 2 keys or  does not contain requred keys
-                if (keysLength > 2 || !doc.title || !doc.text) {
-                  // break out of the for each
-                  throw new Error('Malformed File');
-                }
-              });
-              // get the number of keys in books
-            } catch (error) {
-              if (error.message.toLowerCase() === 'malformed file') {
-                this.validity = 'Malformed File: The JSON file you passed in is out of shape. Please check again';
-              } else {
-                throw error;
-              }
-            }
-          }
-        } catch (error) {
-          this.validity = 'Invalid File: JSON file Does not contain valid JSON object';
-        }
-      }
+    let error = CreateIndexValidator.checkFileName(fileName);
+    if (error) {
+      this.validity = error;
+      return this.validity;
     }
+
+    error = CreateIndexValidator.checkFileContent(fileContent);
+    if (error) {
+      this.validity = error;
+      return this.validity;
+    }
+
     return this.validity;
   }
   /**
@@ -217,5 +187,3 @@ class InvertedIndex {
     return errorMessage;
   }
 }
-
-module.exports = { InvertedIndex };
