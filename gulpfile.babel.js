@@ -24,12 +24,6 @@ gulp.task('serve', ['compile-sources'], () => {
   });
   return stream;
 });
-// gulp.task('pre-test', () => {
-//   const stream = gulp.src(['./src/inverted-index.js'])
-//     .pipe(istanbul())
-//     .pipe(istanbul.hookRequire());
-//   return stream;
-// });
 
 gulp.task('run-test', () => {
   const stream = gulp.src(['tests/inverted-index-tests.js'])
