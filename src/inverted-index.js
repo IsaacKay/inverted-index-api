@@ -30,8 +30,8 @@ class InvertedIndex {
       this.validity = 'The first argument(fileName) a string';
     } else if (typeof fileName === 'string') {
       // check for file extension
-      const ext = fileName.split('.').pop();
-      if (ext !== 'JSON') {
+      const ext = fileName.toLowerCase().split('.').pop();
+      if (ext !== 'json') {
         this.validity = 'File name must be a json file';
       } else if (!fileContent) {
         this.validity = 'Please provide a second argument (fileContent)';
@@ -147,8 +147,9 @@ class InvertedIndex {
       return errorMessage;
     }
     const searchTerms = InvertedIndex.flattenSearchTerms(terms);
+    const indexContent = index[fileName];
     searchTerms.forEach((term) => {
-      const occurrence = index[term];
+      const occurrence = indexContent[term];
       if (occurrence) {
         searchResult[term] = occurrence;
       } else {
@@ -171,9 +172,10 @@ class InvertedIndex {
       term = terms[i];
       if (Array.isArray(term)) {
         terms.splice(i, 1, ...term); // flatten terms
-        i -= 1; // step back one step
+        i = 0; // step back one step
       } else {
-        const splittedString = term.toString().replace(/\s\s+/g, ' ').split(' ');
+        const strippedString = term.toLowerCase().replace(/\s\s+/g, ' ');
+        const splittedString = strippedString.replace(/[^0-9a-z\s]/gi, '').split(' ');
         if (splittedString.length > 1) {
           terms.splice(i, 1, ...splittedString);
           i = 0;
@@ -192,12 +194,17 @@ class InvertedIndex {
    * @returns {string} an error if an error occurred or an empty string if not
    */
   validateSearch(index, fileName, searchTerms) {
+    // console.log(index)
+    // console.log(fileName);
+    // console.log(searchTerms);
     const indexIsEmpty = !Object.keys(this.index)[0];
     let errorMessage = '';
     if (!index) {
       errorMessage = 'Please create an index first';
     } else if (typeof index !== 'object') {
       errorMessage = 'The index you provided is invalid';
+    } else if (indexIsEmpty) {
+      errorMessage = 'Please upload or choose a file first';
     } else if (!fileName) {
       errorMessage = 'Please specify the name of the file you want to process';
     } else if (typeof fileName !== 'string') {
@@ -206,17 +213,12 @@ class InvertedIndex {
       const ext = fileName.toLowerCase().split('.').pop();
       if (ext !== 'json') {
         errorMessage = 'The file you\'re tryinig to check should be a json file';
+      } else if (!searchTerms || !searchTerms[0]) {
+        errorMessage = 'Please provide something to search';
       }
-    } else if (!Array.isArray(searchTerms) && typeof searchTerm !== 'string') {
-      errorMessage = 'The search terms must be array or string';
-    } else if (!searchTerms[0]) {
-      errorMessage = 'Please provide something to search';
-    } else if (indexIsEmpty) {
-      errorMessage = 'Please upload or choose a file first';
     }
     return errorMessage;
   }
 }
-
 
 module.exports = { InvertedIndex };
