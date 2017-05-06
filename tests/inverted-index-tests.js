@@ -2,10 +2,12 @@
 // require sample files
 import fs from 'fs';
 import path from 'path';
+import request from 'supertest';
 import emptyJSONFile from '../fixures/emptyJSONFile.json';
 import validJSONFile from '../fixures/validFile.json';
 import malformedJSONFile from '../fixures/malformedJSONFile.json';
 import InvertedIndex from '../src/inverted-index';
+import app from '../app';
 
 
 // cannot require bad json file so i used fs.readFileSync instead
@@ -151,4 +153,8 @@ describe('InvertedIndex.searchIndex', () => {
   it('Should return \'Please provide something to search\' when no search term is passed in', () => {
     expect(iIndex.searchIndex(iIndex.index, 'validJSONFile.JSON')).toBe('Please provide something to search');
   });
+});
+
+describe('inverted index api', () => {
+  describe('invertedIndex')
 });
