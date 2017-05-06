@@ -29,6 +29,7 @@
     "eslint-plugin-react": "^6.10.3",
     "gulp-babel-istanbul": "^1.6.0",
     "gulp-coveralls": "^0.1.4",
+    "gulp-exit": "0.0.2",
     "gulp-istanbul": "^1.1.1",
     "gulp-istanbul-report": "0.0.1",
     "gulp-jasmine-node": "^1.0.7",
