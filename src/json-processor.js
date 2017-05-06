@@ -1,4 +1,5 @@
 import fs from 'fs';
+import * as path from 'path';
 /**
  * @description Helper class that processes uploaded json files
  * or raw objects
@@ -35,7 +36,7 @@ export default class JSONProcessor {
       files.forEach((file) => {
         const fileType = file.mimetype.toLowerCase();
         if (fileType === 'application/json') {
-          const filePath = `./dist/uploads/${file.filename}`;
+          const filePath = path.join(__dirname, `../dist/uploads/${file.filename}`);
           const options = { encoding: 'utf-8' };
           books = fs.readFileSync(filePath, options);
           books = books.toString();
