@@ -32,9 +32,7 @@ export default class SearchIndexValidator {
    */
   static checkFileName(fileName) {
     let errorMessage = '';
-    if (!fileName) {
-      errorMessage = 'Please specify the name of the file you want to process';
-    } else if (typeof fileName !== 'string') {
+    if (typeof fileName !== 'string') {
       errorMessage = 'The second argument should be file name';
     } else if (typeof fileName === 'string') {
       const ext = fileName.toLowerCase().split('.').pop();
