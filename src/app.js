@@ -2,7 +2,6 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import multer from 'multer';
-import fs from 'fs';
 import bodyParser from 'body-parser';
 import InvertedIndex from './inverted-index';
 import JSONProcessor from './json-processor';
@@ -48,31 +47,10 @@ app.post('/api/create', (req, res) => {
   const isReqMultipart = req.headers['content-type'].indexOf('multipart/form-data');
   if (isReqJSON > -1) {
     const body = req.body;
-    index = JSONProcessor.process(body, invertedIndex);
+    index = JSONProcessor.processRaw(body, invertedIndex);
   } else if (isReqMultipart > -1) {
     const files = req.files;
-    let books;
-    try {
-      files.forEach((file) => {
-        const fileType = file.mimetype.toLowerCase();
-        if (fileType === 'application/json') {
-          const filePath = `./dist/uploads/${file.filename}`;
-          const options = { encoding: 'utf-8' };
-          books = fs.readFileSync(filePath, options);
-          books = books.toString();
-          try {
-            books = JSON.parse(books);
-            index = invertedIndex.createIndex(file.filename, books);
-          } catch (error) {
-            throw new Error('malformed json file');
-          }
-        } else {
-          throw new Error('invalid file: upload json file');
-        }
-      });
-    } catch (error) {
-      index = error.message;
-    }
+    index = JSONProcessor.processFiles(files, invertedIndex);
   }
   res.send(index);
 });
