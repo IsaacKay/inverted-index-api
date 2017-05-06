@@ -6,6 +6,7 @@ import nodemon from 'gulp-nodemon';
 import minify from 'gulp-babel-minify';
 import coveralls from 'gulp-coveralls';
 import injectModules from 'gulp-inject-modules';
+import exit from 'gulp-exit';
 
 gulp.task('compile-sources', () => {
   const stream = gulp.src(['./src/*.js'])
@@ -29,6 +30,7 @@ gulp.task('run-test', () => {
     .pipe(babel())
     .pipe(injectModules())
     .pipe(jasmine({ includeStackTrace: true, color: true }))
+    .pipe(exit());
   return stream;
 });
 
