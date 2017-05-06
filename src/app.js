@@ -53,7 +53,7 @@ app.post('/api/create', (req, res) => {
     const files = req.files;
     index = JSONProcessor.processFiles(files, invertedIndex);
   }
-  res.send(index);
+  res.json(index);
 });
 
 app.post('/api/search', (req, res) => {
