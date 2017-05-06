@@ -13,6 +13,7 @@ export default class InvertedIndex {
     this.index = {};
     /** @private */
     this.file = {};
+    this.searchResult = {};
   }
   /** @returns {object} books- the file content read */
   getFileContent() {
@@ -111,14 +112,42 @@ export default class InvertedIndex {
    * search terms
    * @returns {object} - An containing keys and position in the file
    */
-  searchIndex(index, fileName, ...terms) {
-    //  single search result
+  searchIndex(index, fileName = 'all.json', ...terms) {
+    const searchTerms = InvertedIndex.flattenSearchTerms(terms);
+    const errorMessage = this.validateSearch(index, fileName, searchTerms);
+    if (errorMessage) {
+      return errorMessage;
+    }
+
+    if (fileName !== 'all.json') {
+      const searchResult = this.doSearch(index, fileName, searchTerms);
+      return { [fileName]: searchResult };
+    }
+
+    if (fileName === 'all.json') {
+      const fileNames = Object.keys(index);
+      fileNames.forEach((name) => {
+        this.searchResult[name] = this.doSearch(index, name, searchTerms);
+      });
+      return this.searchResult;
+    }
+  }
+  /**
+   * @description - This method is meant to be used with
+   * in conjuction with searchIndex() method. It contains the
+   * main search logic
+   * @param {object} index - An object of generated indices
+   * @param {string} fileName - The name of the file to be searched
+   * @param {Array} terms - words to be searched
+   * @return {object} - Object containing search result
+   */
+  doSearch(index, fileName, terms) {
+    const searchTerms = terms;
     const searchResult = {};
     const errorMessage = this.validateSearch(index, fileName, terms);
     if (errorMessage) {
       return errorMessage;
     }
-    const searchTerms = InvertedIndex.flattenSearchTerms(terms);
     const indexContent = index[fileName];
     searchTerms.forEach((term) => {
       const occurrence = indexContent[term];
@@ -128,7 +157,7 @@ export default class InvertedIndex {
         searchResult[term] = [];
       }
     });
-    return { [fileName]: searchResult };
+    return searchResult;
   }
 
   /**
@@ -145,13 +174,13 @@ export default class InvertedIndex {
       term = terms[i];
       if (Array.isArray(term)) {
         terms.splice(i, 1, ...term); // flatten terms
-        i = 0; // step back one step
+        i = -1; // step back one step
       } else {
         const strippedString = term.toLowerCase().replace(/\s\s+/g, ' ');
         const splittedString = strippedString.replace(/[^0-9a-z\s]/gi, '').split(' ');
         if (splittedString.length > 1) {
           terms.splice(i, 1, ...splittedString);
-          i = 0;
+          i = -1;
         }
       }
     }
