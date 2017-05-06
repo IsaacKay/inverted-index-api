@@ -1,7 +1,5 @@
 /* eslint no-undef: 0 */
 // require sample files
-import fs from 'fs';
-import path from 'path';
 import supertest from 'supertest';
 import emptyJSONFile from '../fixures/emptyJSONFile.json';
 import validJSONFile from '../fixures/validFile.json';
