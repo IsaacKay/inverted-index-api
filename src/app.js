@@ -19,15 +19,17 @@ if (NODE_ENV === 'PROD') {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-let invertedIndex;
+const invertedIndex = new InvertedIndex();
 let index;
 
 app.post('/api/create', (req, res) => {
   const body = req.body;
-  const fileName = Object.keys(body).pop();
-  const fileContent = Object.values(body).pop();
-  invertedIndex = new InvertedIndex();
-  index = invertedIndex.createIndex(fileName, fileContent);
+  const fileNames = Object.keys(body);
+  fileNames.forEach((fileName) => {
+    const fileContent = body[fileName];
+    index = invertedIndex.createIndex(fileName, fileContent);
+  });
+
   res.json(index);
 });
 

@@ -112,6 +112,7 @@ export default class InvertedIndex {
    * @returns {object} - An containing keys and position in the file
    */
   searchIndex(index, fileName, ...terms) {
+    //  single search result
     const searchResult = {};
     const errorMessage = this.validateSearch(index, fileName, terms);
     if (errorMessage) {
@@ -127,8 +128,9 @@ export default class InvertedIndex {
         searchResult[term] = [];
       }
     });
-    return searchResult;
+    return { [fileName]: searchResult };
   }
+
   /**
    * @description  This method is used by searchIndex() to flatten the an array of search terms
    * I.e if provided with [1,2,4,[5,6,7],8,9], it should return [1,2,3,4,5,6,7,8,9]
@@ -181,3 +183,4 @@ export default class InvertedIndex {
     return this.errorMessage;
   }
 }
+
