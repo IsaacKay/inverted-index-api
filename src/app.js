@@ -44,26 +44,46 @@ const invertedIndex = new InvertedIndex();
 let index;
 
 app.post('/api/create', (req, res) => {
-  const isReqJSON = req.headers['content-type'].indexOf('application/json');
-  const isReqMultipart = req.headers['content-type'].indexOf('multipart/form-data');
-  if (isReqJSON > -1) {
-    const body = req.body;
-    index = JSONProcessor.processRaw(body, invertedIndex);
-  } else if (isReqMultipart > -1) {
-    const files = req.files;
-    index = JSONProcessor.processFiles(files, invertedIndex);
+  try {
+    const isReqJSON = req.headers['content-type'].indexOf('application/json');
+    const isReqMultipart = req.headers['content-type'].indexOf('multipart/form-data');
+    if (isReqJSON > -1) {
+      const body = req.body;
+      // goto json-processor.js file to see how this class works
+      index = JSONProcessor.processRaw(body, invertedIndex);
+    } else if (isReqMultipart > -1) {
+      const files = req.files;
+      // goto json-processor.js file to see how this class works
+      index = JSONProcessor.processFiles(files, invertedIndex);
+      return res.send(index);
+    }
+  } catch (error) {
+    return res.send('invalid json file');
   }
-  res.json(index);
 });
 
 app.post('/api/search', (req, res) => {
-  const body = req.body;
-  const fileName = Object.keys(body).pop();
-  const searchTerms = Object.values(body).pop();
-  const searchResult = invertedIndex.searchIndex(index, fileName, searchTerms);
-  res.json(searchResult);
+  try {
+    const body = req.body;
+    let searchResult;
+    if (!index) {
+      return res.send('Please create an index. See documentation');
+    }
+    if (Array.isArray(body)) {
+      searchResult = invertedIndex.searchIndex(index, undefined, body);
+      return res.send(searchResult);
+    }
+    const fileName = Object.keys(body).pop();
+    const searchTerms = Object.values(body).pop();
+    searchResult = invertedIndex.searchIndex(index, fileName, searchTerms);
+    return res.send(searchResult);
+  } catch (error) {
+    return res.send('Invalid javascript object');
+  }
 });
 
 const port = app.get('PORT');
 app.listen(port, () => console.log(`listening on port ${port}`));
+
+export default app;
 
