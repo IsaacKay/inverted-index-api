@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import multer from 'multer';
 import bodyParser from 'body-parser';
+import fs from 'fs';
 import InvertedIndex from './inverted-index';
 import JSONProcessor from './json-processor';
 
