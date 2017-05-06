@@ -29,7 +29,6 @@ app.post('/api/create', (req, res) => {
     const fileContent = body[fileName];
     index = invertedIndex.createIndex(fileName, fileContent);
   });
-
   res.json(index);
 });
 
