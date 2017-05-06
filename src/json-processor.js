@@ -6,7 +6,6 @@ import * as path from 'path';
  */
 export default class JSONProcessor {
   /**
-   * 
    * @param {object} body - javascript json object
    * @param {InvertedIndex} iIndex - An instance of InvertedIndex class
    * @return {object|string}  - An object containing generated indices or
