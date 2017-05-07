@@ -1,5 +1,5 @@
 /**
- * @description - Helps InvertedIndex.createIndex with validataion of 
+ * @description - Helps InvertedIndex.createIndex with validataion of
  * parameters passed in
  */
 export default class CreateIndexValidator {
