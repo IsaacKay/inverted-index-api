@@ -48,6 +48,7 @@ app.post('/api/create', (req, res) => {
       const body = req.body;
       // goto json-processor.js file to see how this class works
       index = JSONProcessor.processRaw(body, invertedIndex);
+      return res.send(index);
     } else if (isReqMultipart > -1) {
       const files = req.files;
       // goto json-processor.js file to see how this class works
