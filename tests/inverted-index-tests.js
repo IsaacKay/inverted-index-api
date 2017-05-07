@@ -9,9 +9,8 @@ import InvertedIndex from '../src/inverted-index';
 import app from '../src/app';
 
 const request = supertest(app);
-
 const invertedIndex = new InvertedIndex();
-
+const baseDirectory = process.cwd();
 const validJSONFile2Index = {
   'validFile2.json': {
     2: [0, 1],
@@ -197,8 +196,8 @@ describe('inverted index api', () => {
       };
       request
         .post('/api/create')
-        .attach('files', 'fixures/validFile2.json')
-        .attach('files', 'fixures/validFile.json')
+        .attach('files', `${baseDirectory}/fixures/validFile2.json`)
+        .attach('files', `${baseDirectory}/fixures/validFile.json`)
         .expect(expectedResults)
         .expect(200, done);
     });
@@ -214,7 +213,7 @@ describe('inverted index api', () => {
     it('Should return \'Please provide a second argument (fileContent)\' when empty file is uplaoded', (done) => {
       request
         .post('/api/create')
-        .attach('files', 'fixures/emptyJSONFile.json')
+        .attach('files', `${baseDirectory}/fixures/emptyJSONFile.json`)
         .expect('Please provide a second argument (fileContent)')
         .expect(200, done);
     });
@@ -224,7 +223,7 @@ describe('inverted index api', () => {
     it('should return correct index when searching after creating index', (done) => {
       request
         .post('/api/create')
-        .attach('files', 'fixures/validFile.json')
+        .attach('files', `${baseDirectory}/fixures/validFile.json`)
         .expect(200, done);
 
       request
