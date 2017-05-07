@@ -1,6 +1,7 @@
 /**
  * @description - Helps InvertedIndex.createIndex with validataion of
- * parameters passed in
+ * parameters passed in.
+ * The main purpose of the 
  */
 export default class CreateIndexValidator {
   /**
@@ -12,6 +13,7 @@ export default class CreateIndexValidator {
   static isJSON(fileContent) {
     let isJSON = true;
     try {
+      // ensure that file content is a valid json
       const stringifiedBooks = JSON.stringify(fileContent);
       JSON.parse(stringifiedBooks);
     } catch (error) {
@@ -54,9 +56,9 @@ export default class CreateIndexValidator {
    * valid
    */
   static checkFileName(fileName) {
-    let error;
+    let error; // undefined if no error occurs
     if (!fileName || typeof fileName === 'boolean') {
-      error = 'Please specify a file name';
+      error = 'Please specify a file name'; 
     } else if (typeof fileName !== 'string') {
       this.validity = 'The first argument(fileName) a string';
     } else if (typeof fileName === 'string') {
