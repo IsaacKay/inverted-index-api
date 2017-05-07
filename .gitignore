@@ -2,4 +2,4 @@
 /dist/uploads/*.json
 .env
 settings.json
-/dist
+/dist/*.js
