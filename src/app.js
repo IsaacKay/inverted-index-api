@@ -24,10 +24,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 const uploadPath = `${process.cwd()}/dist/uploads`;
 
-if (!fs.existsSync(uploadPath)) {
-  fs.mkdirSync(uploadPath);
-}
-
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
     callback(null, uploadPath);
