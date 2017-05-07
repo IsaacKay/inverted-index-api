@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "start": "gulp serve"
+    "test": "gulp run-tests"
   },
   "repository": {
     "type": "git",
