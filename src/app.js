@@ -22,9 +22,9 @@ if (NODE_ENV === 'PROD') {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
-if (!fs.existsSync('./dist/uploads')) {
-  fs.mkdirSync('./dist/uploads');
+const uploadPath = `${process.cwd()}/dist/uploads`;
+if (!fs.existsSync(uploadPath)) {
+  fs.mkdirSync(uploadPath);
 }
 
 const storage = multer.diskStorage({
