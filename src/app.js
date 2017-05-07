@@ -10,7 +10,7 @@ dotenv.config();
 
 const NODE_ENV = process.env.NODE_ENV;
 const app = express();
-
+// set port based on the  NODE_ENV  VALUE
 if (NODE_ENV === 'PROD') {
   app.set('PORT', process.env.PORT_PROD);
 } else if (NODE_ENV === 'DEV') {
@@ -19,14 +19,18 @@ if (NODE_ENV === 'PROD') {
   app.set('PORT', process.env.PORT_TEST);
 }
 
+// use bodyparser to get application/json request
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
 const uploadPath = `${process.cwd()}/dist/uploads`;
 
+// set torage path for multer
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
     callback(null, uploadPath);
   },
+  // rename file to it's original name
   filename: (req, file, callback) => {
     callback(null, file.originalname);
   }
@@ -34,6 +38,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+// use multer to get multipart/form-data requests
 app.use(upload.array('files', 5));
 
 const invertedIndex = new InvertedIndex();
@@ -62,25 +67,32 @@ app.post('/api/create', (req, res) => {
 app.post('/api/search', (req, res) => {
   try {
     const body = req.body;
-    let searchResult;
+    let searchResult = {};
     if (!index) {
+      // if index is not yet created, send error message
       return res.send('Please create an index. See documentation');
     }
+    // the request body is an array
     if (Array.isArray(body)) {
       searchResult = invertedIndex.searchIndex(index, undefined, body);
       return res.send(searchResult);
     }
-    const fileName = Object.keys(body).pop();
-    const searchTerms = Object.values(body).pop();
-    searchResult = invertedIndex.searchIndex(index, fileName, searchTerms);
+    // if this line is reached, it means a javascript object is sent
+    const fileNames = Object.keys(body);
+    fileNames.forEach((fileName) => {
+      const searchTerms = body[fileName]; // searchTerm for one file
+      const result = invertedIndex.searchIndex(index, fileName, searchTerms);
+      searchResult[fileName] = result[fileName];
+    });
     return res.send(searchResult);
   } catch (error) {
     return res.send('Invalid javascript object');
   }
 });
 
+// get port
 const port = app.get('PORT');
-app.listen(port, () => console.log(`listening on port ${port}`));
+app.listen(process.env.PORT || port, () => console.log(`listening on port ${port}`));
 
 export default app;
 
