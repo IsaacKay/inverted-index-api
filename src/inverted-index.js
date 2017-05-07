@@ -120,7 +120,7 @@ export default class InvertedIndex {
     if (errorMessage) {
       return errorMessage;
     }
-    // get serach result for  a single file
+    // get search result for  a single file
     if (fileName !== 'all.json') {
       const searchResult = this.doSearch(index, fileName, searchTerms);
       return { [fileName]: searchResult };
