@@ -1,20 +1,57 @@
 /* eslint no-undef: 0 */
 // require sample files
-import fs from 'fs';
-import path from 'path';
+import supertest from 'supertest';
 import emptyJSONFile from '../fixures/emptyJSONFile.json';
 import validJSONFile from '../fixures/validFile.json';
+import validJSONFile2 from '../fixures/validFile2.json';
 import malformedJSONFile from '../fixures/malformedJSONFile.json';
 import InvertedIndex from '../src/inverted-index';
+import app from '../src/app';
 
-
-// cannot require bad json file so i used fs.readFileSync instead
-const invalidJSONFile = fs.readFileSync(
-  path.join(
-    __dirname, '../fixures/invalidJSONFile.json')
-  , 'utf-8')
-  .toString();
+const request = supertest(app);
 const invertedIndex = new InvertedIndex();
+const baseDirectory = process.cwd();
+const validJSONFile2Index = {
+  'validFile2.json': {
+    2: [0, 1],
+    22: [1],
+    the: [0, 1],
+    title: [0, 1],
+    of: [0, 1],
+    text: [0, 1],
+    second: [0, 1],
+    file: [0, 1],
+    when: [0, 1]
+  }
+};
+
+const validJSONFileIndex = {
+  'validFile.json': {
+    an: [0],
+    inquiry: [0],
+    into: [0],
+    the: [0, 1],
+    wealth: [0],
+    of: [0],
+    nations: [0],
+    this: [0, 1],
+    string: [0, 1],
+    seeks: [0],
+    to: [0, 1],
+    help: [0, 1],
+    you: [0, 1],
+    understand: [0, 1],
+    problem: [0, 1],
+    set: [0, 1],
+    from: [1],
+    third: [1],
+    world: [1],
+    first: [1],
+    is: [1],
+    also: [1]
+  }
+};
+
 describe('InvertedIndex', () => {
   // this suit makes sure that Inverted index contains the required class
   describe('Correctness of InvertedIndexClass', () => {
@@ -60,15 +97,6 @@ describe('InvertedIndex', () => {
     it('Should return \'true\' when a valid argument is passed as', () => {
       expect(invertedIndex.isFileValid('validJSONFile.JSON', validJSONFile)).toBe(true);
     });
-
-    it('Should return \'Empty File: The JSON File must not be empty\' an empty JSON file is passed', () => {
-      expect(invertedIndex.isFileValid('emptyJSONFile.JSON', emptyJSONFile)).toBe('Empty File: The JSON File must not be empty');
-    });
-
-    it('Should return \'Invalid File: File must be a real JSON file\' when an Invalid json file is passed', () => {
-      expect(invertedIndex.isFileValid('invalidJSONFile.JSON', invalidJSONFile)).toBe('Invalid File: File must be a real JSON file');
-    });
-
     it('Should return \'Malformed File: The JSON file you passed in is out of shape. Please check again\' when a malformed File is passed', () => {
       expect(invertedIndex.isFileValid('malformedJSONFile.JSON', malformedJSONFile)).toBe('Malformed File: The JSON file you passed in is out of shape. Please check again');
     });
@@ -96,33 +124,7 @@ describe('InvertedIndex', () => {
 // this suit contains unit tests for createIndex method
 describe('InvertedIndex.createIndex', () => {
   it('Should return an index when provided with valid filename as argument', () => {
-    const expectedIndex = {
-      'validJSONFile.JSON': {
-        an: [0],
-        inquiry: [0],
-        into: [0],
-        the: [0, 1],
-        wealth: [0],
-        of: [0],
-        nations: [0],
-        this: [0, 1],
-        string: [0, 1],
-        seeks: [0],
-        to: [0, 1],
-        help: [0, 1],
-        you: [0, 1],
-        understand: [0, 1],
-        problem: [0, 1],
-        set: [0, 1],
-        from: [1],
-        third: [1],
-        world: [1],
-        first: [1],
-        is: [1],
-        also: [1]
-      }
-    };
-    expect(invertedIndex.createIndex('validJSONFile.JSON', validJSONFile)).toEqual(expectedIndex);
+    expect(invertedIndex.createIndex('validFile.json', validJSONFile)).toEqual(validJSONFileIndex);
   });
 
   it('Should return an error message when cannot be created for any reason', () => {
@@ -144,11 +146,90 @@ describe('InvertedIndex.searchIndex', () => {
     expect(iIndex.searchIndex('an')).toEqual('The index you provided is invalid');
   });
 
-  it('Should return \'Please specify the name of the file you want to process\' when no file name is specified', () => {
-    expect(iIndex.searchIndex(iIndex.index)).toBe('Please specify the name of the file you want to process');
+  it('Should return search from all indexes when  filename undefine', () => {
+    const expectedResult = {
+      'validJSONFile.json': {
+        this: [0, 1],
+        world: [1],
+        is: [1],
+        wide: [],
+        but: [],
+        wild: []
+      },
+      'validFile2.json': {
+        this: [],
+        world: [],
+        is: [],
+        wide: [],
+        but: [],
+        wild: []
+      }
+    };
+    iIndex.createIndex('validFile2.json', validJSONFile2);
+    const searchTerms = 'this world is wide but wild';
+    expect(iIndex.searchIndex(iIndex.index, undefined, searchTerms)).toEqual(expectedResult);
   });
 
   it('Should return \'Please provide something to search\' when no search term is passed in', () => {
     expect(iIndex.searchIndex(iIndex.index, 'validJSONFile.JSON')).toBe('Please provide something to search');
+  });
+});
+
+describe('inverted index api', () => {
+  describe('/api/create', () => {
+    it('should create correct index of the file when valid file is passed in', (done) => {
+      request
+        .post('/api/create')
+        .attach('files', 'fixures/validFile2.json')
+        .expect(validJSONFile2Index)
+        .expect(200, done);
+    });
+
+    it('Should return correct result when requesting multiple files', (done) => {
+      const validFileName = Object.keys(validJSONFileIndex).pop();
+      const validValue = Object.values(validJSONFileIndex).pop();
+      const validFile2Name = Object.keys(validJSONFile2Index).pop();
+      const validValue2 = Object.values(validJSONFile2Index).pop();
+      const expectedResults = {
+        [validFileName]: validValue,
+        [validFile2Name]: validValue2
+      };
+      request
+        .post('/api/create')
+        .attach('files', `${baseDirectory}/fixures/validFile2.json`)
+        .attach('files', `${baseDirectory}/fixures/validFile.json`)
+        .expect(expectedResults)
+        .expect(200, done);
+    });
+
+    it('Should return \'malformed json file\' when a bad json file is uploaded', (done) => {
+      request
+        .post('/api/create')
+        .attach('files', 'fixures/invalidJSONFile.json')
+        .expect('malformed json file')
+        .expect(200, done);
+    });
+
+    it('Should return \'Please provide a second argument (fileContent)\' when empty file is uplaoded', (done) => {
+      request
+        .post('/api/create')
+        .attach('files', `${baseDirectory}/fixures/emptyJSONFile.json`)
+        .expect('Please provide a second argument (fileContent)')
+        .expect(200, done);
+    });
+  });
+
+  describe('/api/search', () => {
+    it('should return correct index when searching after creating index', (done) => {
+      request
+        .post('/api/create')
+        .attach('files', `${baseDirectory}/fixures/validFile.json`)
+        .expect(200, done);
+
+      request
+        .post('/api/search')
+        .send(['this is some crazy search'])
+        .expect(200, done);
+    });
   });
 });
