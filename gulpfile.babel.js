@@ -25,7 +25,7 @@ gulp.task('serve', ['compile-sources'], () => {
   return stream;
 });
 
-gulp.task('run-test', () => {
+gulp.task('run-tests', () => {
   const stream = gulp.src(['tests/inverted-index-tests.js'])
     .pipe(babel())
     .pipe(injectModules())
