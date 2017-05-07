@@ -51,6 +51,7 @@ export default class InvertedIndex {
    * @param {object} fileContent - Represents the content of the file
    */
   readFile(fileName, fileContent) {
+    // validate file first
     const validity = this.isFileValid(fileName, fileContent);
     if (validity === true) {
       this.file = { fileName, fileContent, error: '' };
@@ -70,6 +71,7 @@ export default class InvertedIndex {
    */
   createIndex(fileName, fileContent) {
     const has = Object.prototype.hasOwnProperty;
+    // get read error. readError should be false if read is successful
     const readError = this.readFile(fileName, fileContent).error;
     const index = {};
     if (readError) { // if file reading took place with error
@@ -118,12 +120,12 @@ export default class InvertedIndex {
     if (errorMessage) {
       return errorMessage;
     }
-
+    // get serach result for  a single file
     if (fileName !== 'all.json') {
       const searchResult = this.doSearch(index, fileName, searchTerms);
       return { [fileName]: searchResult };
     }
-
+    // for all files
     if (fileName === 'all.json') {
       const fileNames = Object.keys(index);
       fileNames.forEach((name) => {
@@ -174,11 +176,15 @@ export default class InvertedIndex {
       term = terms[i];
       if (Array.isArray(term)) {
         terms.splice(i, 1, ...term); // flatten terms
-        i = -1; // step back one step
+        i = -1; // start searching again
       } else {
+        // get rid of exptra spaces
         const strippedString = term.toLowerCase().replace(/\s\s+/g, ' ');
+        // remove all special characters
         const splittedString = strippedString.replace(/[^0-9a-z\s]/gi, '').split(' ');
+
         if (splittedString.length > 1) {
+          // faltten and start start searching again
           terms.splice(i, 1, ...splittedString);
           i = -1;
         }
@@ -197,18 +203,22 @@ export default class InvertedIndex {
    */
   validateSearch(index, fileName, searchTerms) {
     this.errorMessage = '';
+    // check if index is valid
     this.errorMessage = SearchIndexValidator.checkIndex(index);
     if (this.errorMessage) {
       return this.errorMessage;
     }
+    // check if fileName is valid
     this.errorMessage = SearchIndexValidator.checkFileName(fileName);
     if (this.errorMessage) {
       return this.errorMessage;
     }
+    // check if search terms are valid
     this.errorMessage = SearchIndexValidator.checkSearchTerms(searchTerms);
     if (this.errorMessage) {
       return this.errorMessage;
     }
+    // return empty string if no error occured during validation
     return this.errorMessage;
   }
 }
