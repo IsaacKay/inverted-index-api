@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 import express from 'express';
 import multer from 'multer';
 import bodyParser from 'body-parser';
-import InvertedIndex from './inverted-index';
 import Controller from './controllers/controller';
 
 dotenv.config();
@@ -40,9 +39,6 @@ const upload = multer({ storage });
 
 // use multer to get multipart/form-data requests
 app.use(upload.array('files', 5));
-
-const invertedIndex = new InvertedIndex();
-let index;
 
 app.post('/api/create', (req, res) => {
   Controller.createIndex(req, res);
