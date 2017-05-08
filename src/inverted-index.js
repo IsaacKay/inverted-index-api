@@ -1,5 +1,5 @@
-import CreateIndexValidator from './create-index-validator';
-import SearchIndexValidator from './search-index-validator';
+import CreateIndexValidator from './helpers/create-index-validator';
+import SearchIndexValidator from './helpers/search-index-validator';
 
 /** InvertedIndex is a class representing a computer science concept
  *  where the content of a file in mapped to it's position in data base
@@ -82,15 +82,12 @@ export default class InvertedIndex {
     let docNumber = 0;
     docs.forEach((doc) => {
       // title of the doc and replace extra spaces with a single space
-      let title = doc.title.toLowerCase().replace(/\s\s+/g, ' ');
-      let text = doc.text.toLowerCase().replace(/\s\s+/g, ' ');
-
-      // turn book content as to an array words
-      title = title.split(' ');
-      text = text.split(' ');
+      const title = doc.title.toLowerCase().replace(/\s\s+/g, ' ');
+      const text = doc.text.toLowerCase().replace(/\s\s+/g, ' ');
+      let docContent = `${title} ${text}`;
+      docContent = docContent.replace(/[^0-9a-z\s]/gi).split(' ');
 
       // combine both title and text into one array
-      const docContent = [...title, ...text];
       docContent.forEach((word) => {
         if (!has.call(index, word)) {
           index[word] = [docNumber];
@@ -180,13 +177,16 @@ export default class InvertedIndex {
       } else {
         // get rid of exptra spaces
         const strippedString = term.toLowerCase().replace(/\s\s+/g, ' ');
+        //console.log(strippedString);
         // remove all special characters
-        const splittedString = strippedString.replace(/[^0-9a-z\s]/gi, '').split(' ');
+        const splittedString = strippedString.toLowerCase().replace(/[^0-9a-z\s]/gi, '').split(' ');
 
         if (splittedString.length > 1) {
           // faltten and start start searching again
           terms.splice(i, 1, ...splittedString);
           i = -1;
+        } else {
+          terms[i] = splittedString;
         }
       }
     }
