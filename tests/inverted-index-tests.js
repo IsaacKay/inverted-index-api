@@ -201,7 +201,7 @@ describe('InvertedIndex.searchIndex', () => {
 });
 
 describe('inverted index api', () => {
-  describe('/api/search without index created', (done) => {
+  describe('/api/search without index created', () => {
     it('Should return an error message when trying to search without creating an index first', (done) => {
       const request2 = supertest(app);
       request2
