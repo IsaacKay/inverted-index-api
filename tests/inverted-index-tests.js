@@ -51,6 +51,31 @@ const validJSONFileIndex = {
     also: [1]
   }
 };
+// result when 'this is some crazy search' is searched
+const validFileSearchResult = {
+  'validFile.json': {
+    this: [0, 1],
+    is: [1],
+    the: [0, 1],
+    third: [1],
+    world: [1],
+    second: [],
+    of: [0],
+    all: []
+  }
+};
+const validFile2SearchResult = {
+  'validFile2.json': {
+    this: [],
+    is: [],
+    the: [0, 1],
+    third: [],
+    world: [],
+    second: [0, 1],
+    of: [0, 1],
+    all: []
+  }
+};
 
 describe('InvertedIndex', () => {
   // this suit makes sure that Inverted index contains the required class
@@ -176,6 +201,16 @@ describe('InvertedIndex.searchIndex', () => {
 });
 
 describe('inverted index api', () => {
+  describe('/api/search without index created', (done) => {
+    it('Should return an error message when trying to search without creating an index first', (done) => {
+      const request2 = supertest(app);
+      request2
+        .post('/api/search')
+        .send(['this is the third world secod of all'])
+        .expect('Please create an index. See documentation')
+        .expect(200, done);
+    });
+  });
   describe('/api/create', () => {
     it('should create correct index of the file when valid file is passed in', (done) => {
       request
@@ -220,15 +255,31 @@ describe('inverted index api', () => {
   });
 
   describe('/api/search', () => {
-    it('should return correct index when searching after creating index', (done) => {
+    it('should return correct index when searching for single file after creating index', (done) => {
       request
         .post('/api/create')
         .attach('files', `${baseDirectory}/fixures/validFile.json`)
-        .expect(200, done);
-
+        .end(() => {
+          request
+            .post('/api/search')
+            .send({ 'validFile.json': ['this is the third world second of all'] })
+            .expect(validFileSearchResult)
+            .expect(200, done);
+        });
+    });
+    it('Should should search through all files when search term is not specified', (done) => {
+      const validFileName = Object.keys(validFileSearchResult).pop();
+      const validFile2Name = Object.keys(validFile2SearchResult).pop();
+      const validFileValue = Object.values(validFileSearchResult).pop();
+      const validFile2Value = Object.values(validFile2SearchResult).pop();
+      const expectedResult = {
+        [validFileName]: validFileValue,
+        [validFile2Name]: validFile2Value
+      };
       request
         .post('/api/search')
-        .send(['this is some crazy search'])
+        .send(['this is the third world second of all'])
+        .expect(expectedResult)
         .expect(200, done);
     });
   });
