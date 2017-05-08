@@ -5,7 +5,19 @@ import InvertedIndex from '../inverted-index';
 const invertedIndex = new InvertedIndex();
 let index; // the index created when create index is called
 
+/**
+ * @description - Controllers class handles request. It has
+ * Two static function that handles http request from
+ * Both /api/create route and /api/search route
+ */
 export default class Controller {
+  /**
+   * @static
+   * @param {Request} req -Http request from requst from express
+   * @param {Response} res -Http response from express
+   * @returns {Response} - Http response. should send index created or error
+   * message
+   */
   static createIndex(req, res) {
     try {
       const isReqJSON = req.headers['content-type'].indexOf('application/json');
@@ -26,6 +38,13 @@ export default class Controller {
     }
   }
 
+  /**
+   * @static
+   * @param {Request} req -Http request from requst from express
+   * @param {Response} res -Http response from express
+   * @returns {Response} - Http response. should send search result created or error
+   * message
+   */
   static searchIndex(req, res) {
     try {
       const body = req.body;
