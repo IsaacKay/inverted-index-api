@@ -9,7 +9,7 @@ import injectModules from 'gulp-inject-modules';
 import exit from 'gulp-exit';
 
 gulp.task('compile-sources', () => {
-  const stream = gulp.src(['./src/*.js'])
+  const stream = gulp.src(['./src/**/*.js'])
     .pipe(babel())
     .pipe(minify())
     .pipe(gulp.dest('dist'));
