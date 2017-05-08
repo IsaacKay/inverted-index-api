@@ -1,5 +1,4 @@
 node_modules/
-/coverage
 dist/uploads/*.json
 !dist/uploads/validFile.json
 dist/*.js
