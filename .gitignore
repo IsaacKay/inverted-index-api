@@ -1,8 +1,8 @@
 node_modules/
+/coverage
 dist/uploads/*.json
 !dist/uploads/validFile.json
 dist/*.js
-coverage/
 !dist/app.js
 .env
 .coveralls.yml
