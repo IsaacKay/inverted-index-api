@@ -36,7 +36,7 @@ gulp.task('run-tests', () => {
 
 
 gulp.task('coverage', () => {
-  gulp.src(['src/*.js', '/app.js'])
+  gulp.src(['src/**/*.js', '/app.js'])
     .pipe(istanbul())
     .pipe(istanbul.hookRequire())
     .on('finish', () => {
