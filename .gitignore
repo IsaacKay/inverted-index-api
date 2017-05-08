@@ -5,4 +5,5 @@ dist/uploads/*.json
 dist/*.js
 !dist/app.js
 .env
+.coveralls.yml
 settings.json
