@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import multer from 'multer';
 import bodyParser from 'body-parser';
-import Controller from './controllers/controller';
+import RequestHandler from './helpers/request-handler';
 
 dotenv.config();
 
@@ -41,11 +41,11 @@ const upload = multer({ storage });
 app.use(upload.array('files', 5));
 
 app.post('/api/create', (req, res) => {
-  Controller.createIndex(req, res);
+  RequestHandler.handleCreate(req, res);
 });
 
 app.post('/api/search', (req, res) => {
-  Controller.searchIndex(req, res);
+  RequestHandler.handleSearch(req, res);
 });
 
 // get port

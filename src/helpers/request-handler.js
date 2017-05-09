@@ -10,7 +10,7 @@ let index; // the index created when create index is called
  * Two static function that handles http request from
  * Both /api/create route and /api/search route
  */
-export default class Controller {
+export default class RequestHandler {
   /**
    * @static
    * @param {Request} req -Http request from requst from express
@@ -18,7 +18,7 @@ export default class Controller {
    * @returns {Response} - Http response. should send index created or error
    * message
    */
-  static createIndex(req, res) {
+  static handleCreate(req, res) {
     try {
       const isReqJSON = req.headers['content-type'].indexOf('application/json');
       const isReqMultipart = req.headers['content-type'].indexOf('multipart/form-data');
@@ -45,7 +45,7 @@ export default class Controller {
    * @returns {Response} - Http response. should send search result created or error
    * message
    */
-  static searchIndex(req, res) {
+  static handleSearch(req, res) {
     try {
       const body = req.body;
       let searchResult = {};
