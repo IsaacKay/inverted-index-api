@@ -177,7 +177,6 @@ export default class InvertedIndex {
       } else {
         // get rid of exptra spaces
         const strippedString = term.toLowerCase().replace(/\s\s+/g, ' ');
-        //console.log(strippedString);
         // remove all special characters
         const splittedString = strippedString.toLowerCase().replace(/[^0-9a-z\s]/gi, '').split(' ');
 

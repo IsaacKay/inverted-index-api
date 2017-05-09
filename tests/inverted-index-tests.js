@@ -282,5 +282,20 @@ describe('inverted index api', () => {
         .expect(expectedResult)
         .expect(200, done);
     });
+    it('Should it should return correct result when nested array is sent', (done) => {
+      const validFileName = Object.keys(validFileSearchResult).pop();
+      const validFile2Name = Object.keys(validFile2SearchResult).pop();
+      const validFileValue = Object.values(validFileSearchResult).pop();
+      const validFile2Value = Object.values(validFile2SearchResult).pop();
+      const expectedResult = {
+        [validFileName]: validFileValue,
+        [validFile2Name]: validFile2Value
+      };
+      request
+        .post('/api/search')
+        .send(['this is', ['the'], ['third world', ['second']], ['of all']])
+        .expect(expectedResult)
+        .expect(200, done);
+    });
   });
 });
