@@ -36,7 +36,7 @@ gulp.task('run-tests', () => {
 
 
 gulp.task('coverage', () => {
-  gulp.src(['src/inverted-index.js'])
+  gulp.src(['src/**/*.js'])
     .pipe(istanbul())
     .pipe(istanbul.hookRequire())
     .on('finish', () => {
