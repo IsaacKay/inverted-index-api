@@ -3,8 +3,9 @@ import dotenv from 'dotenv';
 import express from 'express';
 import multer from 'multer';
 import bodyParser from 'body-parser';
-import RequestHandler from './helpers/request-handler';
+import requestHandler from './helpers/request-handler';
 
+const RequestHandler = requestHandler.RequestHandler;
 dotenv.config();
 
 const NODE_ENV = process.env.NODE_ENV;

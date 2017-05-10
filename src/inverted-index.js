@@ -142,7 +142,7 @@ export default class InvertedIndex {
     const indexContent = index[fileName];
     searchTerms.forEach((term) => {
       const occurrence = indexContent[term];
-      if (occurrence) {
+      if (occurrence && Array.isArray(occurrence) && typeof occurrence[0] === 'number') {
         searchResult[term] = occurrence;
       } else {
         searchResult[term] = [];
