@@ -11,7 +11,6 @@ export default class InvertedIndex {
    */
   constructor() {
     this.index = {};
-    /** @private */
     this.file = {};
     this.searchResult = {};
   }
@@ -33,13 +32,11 @@ export default class InvertedIndex {
       this.validity = error;
       return this.validity;
     }
-
     error = CreateIndexValidator.checkFileContent(fileContent);
     if (error) {
       this.validity = error;
       return this.validity;
     }
-
     return this.validity;
   }
   /**
@@ -60,7 +57,6 @@ export default class InvertedIndex {
     }
     return this.file;
   }
-
   /**
    * @description This methods takes in file content. It should not be called until
    * a file has been uploeaded successfully
@@ -74,10 +70,10 @@ export default class InvertedIndex {
     // get read error. readError should be false if read is successful
     const readError = this.readFile(fileName, fileContent).error;
     const index = {};
-    if (readError) { // if file reading took place with error
+    // if file reading took place with error
+    if (readError) {
       return readError;
     }
-
     const docs = fileContent;
     let docNumber = 0;
     docs.forEach((doc) => {
@@ -86,7 +82,6 @@ export default class InvertedIndex {
       const text = doc.text.toLowerCase().replace(/\s\s+/g, ' ');
       let docContent = `${title} ${text}`;
       docContent = docContent.replace(/[^0-9a-z\s]/gi).split(' ');
-
       // combine both title and text into one array
       docContent.forEach((word) => {
         if (!has.call(index, word)) {
@@ -95,7 +90,6 @@ export default class InvertedIndex {
           index[word].push(docNumber);
         }
       });
-
       docNumber += 1;
     });
     this.index[fileName] = index;
@@ -132,9 +126,7 @@ export default class InvertedIndex {
     }
   }
   /**
-   * @description - This method is meant to be used with
-   * in conjuction with searchIndex() method. It contains the
-   * main search logic
+   * @description - This method contains the logic for the code
    * @param {object} index - An object of generated indices
    * @param {string} fileName - The name of the file to be searched
    * @param {Array} terms - words to be searched
@@ -158,7 +150,6 @@ export default class InvertedIndex {
     });
     return searchResult;
   }
-
   /**
    * @description  This method is used by searchIndex() to flatten the an array of search terms
    * I.e if provided with [1,2,4,[5,6,7],8,9], it should return [1,2,3,4,5,6,7,8,9]
@@ -172,8 +163,10 @@ export default class InvertedIndex {
     for (let i = 0; i < terms.length; i += 1) {
       term = terms[i];
       if (Array.isArray(term)) {
-        terms.splice(i, 1, ...term); // flatten terms
-        i = -1; // start searching again
+        // flatten terms
+        terms.splice(i, 1, ...term);
+        // start searching again
+        i = -1;
       } else {
         // get rid of exptra spaces
         const strippedString = term.toLowerCase().replace(/\s\s+/g, ' ');
@@ -192,9 +185,7 @@ export default class InvertedIndex {
     return terms;
   }
   /**
-   * @description This method checks if search can really take place or not
-   * For example, a search cannot be created when no inedex has been created.
-   * this method is used by searchIndex()
+   * @description This method validates  each parameters sent to check index
    * @param {object} index - index passed in from searchIndex method
    * @param {string} fileName - name of file being searched
    * @param {array} searchTerms an array of search terms

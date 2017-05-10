@@ -12,6 +12,7 @@ let index; // the index created when create index is called
  */
 export default class RequestHandler {
   /**
+   * @description takes away all logic from  /api/create route
    * @static
    * @param {Request} req -Http request from requst from express
    * @param {Response} res -Http response from express
@@ -37,8 +38,8 @@ export default class RequestHandler {
       return res.send('invalid json file');
     }
   }
-
   /**
+   * @description -Removes all logic from /api/search route
    * @static
    * @param {Request} req -Http request from requst from express
    * @param {Response} res -Http response from express

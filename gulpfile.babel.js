@@ -16,7 +16,6 @@ gulp.task('compile-sources', () => {
 
   return stream;
 });
-
 gulp.task('serve', ['compile-sources'], () => {
   const stream = nodemon({
     script: 'dist/app.js',
@@ -24,7 +23,6 @@ gulp.task('serve', ['compile-sources'], () => {
   });
   return stream;
 });
-
 gulp.task('run-tests', () => {
   const stream = gulp.src(['tests/inverted-index-tests.js'])
     .pipe(babel())
@@ -33,8 +31,6 @@ gulp.task('run-tests', () => {
     .pipe(exit());
   return stream;
 });
-
-
 gulp.task('coverage', () => {
   gulp.src(['src/**/*.js'])
     .pipe(istanbul())

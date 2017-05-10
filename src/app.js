@@ -17,13 +17,10 @@ if (NODE_ENV === 'PROD') {
 } else {
   app.set('PORT', process.env.PORT_TEST);
 }
-
 // use bodyparser to get application/json request
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
 const uploadPath = `${process.cwd()}/dist/uploads`;
-
 // set torage path for multer
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
@@ -34,23 +31,19 @@ const storage = multer.diskStorage({
     callback(null, file.originalname);
   }
 });
-
 const upload = multer({ storage });
-
 // use multer to get multipart/form-data requests
 app.use(upload.array('files', 5));
 
 app.post('/api/create', (req, res) => {
   RequestHandler.handleCreate(req, res);
 });
-
 app.post('/api/search', (req, res) => {
   RequestHandler.handleSearch(req, res);
 });
-
 // get port
 const port = app.get('PORT');
-const server = app.listen(process.env.PORT || port, () => console.log(`listening on port ${port}`));
+const server = app.listen(process.env.PORT || port);
 
 export default server;
 
