@@ -101,12 +101,12 @@ _"of":[0,1] means that the word of appears in doc0 and doc1. same principle appl
 
 **Example using postman to upload json file**
 Uploaded files should look like this
-![file content](https://www.dropbox.com/s/rw11lbj830asv4k/file1_json.png?dl=0)
+[file example](https://www.dropbox.com/s/rw11lbj830asv4k/file1_json.png?dl=0)
 
 when uploading files, your field name should be files.
 _note: while uploading with postman, do not specify any header_
 The screenshot below illustrtate uploading creating  index with postman
-![create index with postman](https://www.dropbox.com/s/3620oo387nho2fk/creating_index_from_postman.png?dl=0)
+[postman screenshot](%28https://www.dropbox.com/s/3620oo387nho2fk/creating_index_from_postman.png?dl=0)
 
 ### Searching created index
 *searching goes through the /api/search route*
