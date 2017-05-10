@@ -32,7 +32,7 @@ gulp.task('run-tests', () => {
   return stream;
 });
 gulp.task('coverage', () => {
-  gulp.src(['src/**/*.js'])
+  gulp.src(['src/**/*.js', '!src/helpers/uploads-deleter.js', '!src/helpers/json-processor.js'])
     .pipe(istanbul())
     .pipe(istanbul.hookRequire())
     .on('finish', () => {
