@@ -57,9 +57,78 @@
 [10:36:14] [nodemon] watching: /home/fizzy/Desktop/inverted-index-api/src/**/*
 [10:36:14] [nodemon] starting `node dist/app.js`
 listening on port 4001
-
-
   ```
   * Open postman and start using the app `localhost:4001`
+
+  ## Usage
+After starting your server, you are ready to move on. 
+There are 2 end points namely:
+
+### Creating index
+*index is created from /api/create*
+	 This route can take 2 types of data
+		1. 	 multipart/form-data request
+		2. 	 application/json
+		
+		Also note that whatever you send to this /api/create should be json data in this form
+		`{
+			"file1.json": [
+					{
+						"title": "the title of doc 1 in file 1",
+						"text": "the text of doc 1in file 1"
+					},
+				{
+					"title": "the title of doc 2 file 1",
+					"text": "the text of doc 2 file 1"
+				}
+			],
+		"file2.json": [
+			{
+				"title": "the title of doc 1 file 2",
+				"text": "the text of doc 1 file 2"
+			}
+		]
+	}`
+
+**Example using curl to send application/json content**
+	_request_
+	> `$ curl -H "Content-Type: application/json" -X POST -d '{"fileName.json": [{"title": "this is the title of the first doc", "text":"this is the text 2"}, {"title": "this is the second doc title", "text": "this is the text of second doc"}]}' http://localhost:3001/api/create`
+
+
+	_response_
+	> `{"file1.json":{"1":[0,1],"2":[1],"the":[0,1],"title":[0,1],"of":[0,1],"doc":[0,1],"file":[0,1],"text":[0,1],"doc1":[0]}}`
+	
+	_"of":[0,1] means that the word of appears in doc0 and doc1. same principle applies to the rest of the genrated index_
+
+**Example using postman to upload json file**
+Uploaded files should look like this
+![file content](https://drive.google.com/file/d/0B_m7o3BtOrGpbHkxc3pyY2pvYlE/view?usp=sharingtp://)
+
+when uploading files, your field name should be files.
+_note: while uploading with postman, do not specify any header_
+The screenshot below illustrtate uploading creating  index with postman
+![create index with postman](https://drive.google.com/file/d/0B_m7o3BtOrGpTi1qSDRaUXBvazg/view?usp=sharing)
+
+### Searching created index
+*searching goes through the /api/search route*
+Once you create index, your index with that of other users is held on the server for at least 10 minutes. After 10 minutes, you might need to create index again.
+
+This route takes `application/json data ` only.
+Search terms must be in this format: `{'fileName.json' : "these are the search terms"}`.
+If the file name is not specified i.e like this `["these", "are", "the", "search", "terms"]`, then the api searches through all files that have been created on the server
+
+**Example Of Search Using curl**
+_request_
+>` curl -H "Content-Type: application/json" -X POST -d '{"file1.json": "these are the search terms"}' http://localhost:3001/api/search`
+_response_
+> `{"file1.json":{"these":[],"are":[],"the":[0,1],"search":[],"terms":[]}}`
+Note: `the:[0,1]` means _the word 'the' is present in doc 1 and doc 2_
+
+**Using  postman to search**
+
+	* open a new tab
+	* set content -type to application/json
+	* post your search term using the raw field;
+
 
 
