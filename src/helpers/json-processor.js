@@ -21,7 +21,6 @@ export default class JSONProcessor {
     });
     return index;
   }
-
   /**
    * @description - Helper method that helps inverted-index api to
    * file uploads
@@ -32,12 +31,13 @@ export default class JSONProcessor {
   static processFiles(files, iIndex) {
     let books;
     let index;
+    let filePath;
     try {
       files.forEach((file) => {
         const fileType = file.mimetype.toLowerCase();
+        filePath = `${process.cwd()}/dist/uploads/${file.filename}`;
         // if the file is json
         if (fileType === 'application/json') {
-          const filePath = `${process.cwd()}/dist/uploads/${file.filename}`;
           const options = { encoding: 'utf-8' };
           books = fs.readFileSync(filePath, options);
           books = books.toString();
@@ -45,7 +45,7 @@ export default class JSONProcessor {
             books = JSON.parse(books);
             index = iIndex.createIndex(file.filename, books);
           } catch (error) {
-            throw new Error('malformed json file');
+            throw new Error('Error: invalid json file');
           }
         } else {
           throw new Error('invalid file: upload json file');

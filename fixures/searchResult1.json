@@ -1,0 +1,12 @@
+{
+  "validFile.json": {
+    "this": [0, 1],
+    "is": [1],
+    "the": [0, 1],
+    "third": [1],
+    "world": [1],
+    "second": [],
+    "of": [0],
+    "all": []
+  }
+}

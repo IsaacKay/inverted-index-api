@@ -1,0 +1,1 @@
+'use strict';Object.defineProperty(exports,'__esModule',{value:!0});var _fs=require('fs'),_fs2=_interopRequireDefault(_fs);function _interopRequireDefault(a){return a&&a.__esModule?a:{default:a}}var filesDir=process.cwd()+'/dist/uploads/';exports.default=setInterval(()=>{var a=_fs2.default.readdirSync(filesDir);a.forEach(b=>{if(b){_fs2.default.unlinkSync(filesDir+b)}})},3000);

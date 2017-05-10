@@ -5,6 +5,8 @@
  */
 export default class CreateIndexValidator {
   /**
+   * @description -checks if a file is json. used in checkFile content to
+   * check if a file is a valid javascript object
    * @static
    * @param {object} fileContent - javascript global object
    * @return {boolean} - true when argument is javascript global object,
@@ -22,6 +24,7 @@ export default class CreateIndexValidator {
     return isJSON;
   }
   /**
+   * @description -Used by InvertedIndex.createIndex to validate fileContent
    * @static
    * @param {object} fileContent  - javascript global object
    * @return {boolean} - true when argument is malformed, false when it is not
@@ -46,8 +49,6 @@ export default class CreateIndexValidator {
     }
     return isMalformed;
   }
-
-
   /**
    * @static
    * @description Checks the file name passed to createIndex if it is a json file
@@ -69,7 +70,6 @@ export default class CreateIndexValidator {
     }
     return error;
   }
-
   /**
    * @static
    * @description Makes sure file content is in right format
@@ -81,7 +81,7 @@ export default class CreateIndexValidator {
     let error;
     let stringifiedDocs;
     if (!fileContent) {
-      error = 'Please provide a second argument (fileContent)';
+      error = 'Empty JSON file. Please format your json file well';
     } else if (!Array.isArray(fileContent)) {
       error = 'The second object Argument must be an array of Objects';
     } else if (this.isJSON(fileContent)) {

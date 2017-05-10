@@ -1,7 +1,9 @@
 node_modules/
 /coverage
-coverage/lcov-report
-/dist/uploads/*.json
-/dist/*.js
+dist/uploads/*.json
+!dist/uploads/validFile.json
+dist/*.js
+!dist/app.js
 .env
+.coveralls.yml
 settings.json
