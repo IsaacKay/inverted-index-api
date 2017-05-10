@@ -81,7 +81,7 @@ export default class CreateIndexValidator {
     let error;
     let stringifiedDocs;
     if (!fileContent) {
-      error = 'Please provide a second argument (fileContent)';
+      error = 'Empty JSON file. Please format your json file well';
     } else if (!Array.isArray(fileContent)) {
       error = 'The second object Argument must be an array of Objects';
     } else if (this.isJSON(fileContent)) {
