@@ -16,49 +16,39 @@ const request = supertest(app);
 const invertedIndex = new InvertedIndex();
 const baseDirectory = process.cwd();
 // result when 'this is some crazy search' is searched
-
 describe('InvertedIndex Structure', () => {
   // this suit makes sure that Inverted index contains the required class
   describe('Correctness of InvertedIndexClass', () => {
     it('Should be defined when instantiated', () => {
       expect(invertedIndex).toBeDefined();
     });
-
     it('Should contain isFileValid Method', () => {
       expect(invertedIndex.isFileValid).toBeDefined();
     });
-
     it('Should contain readFile method', () => {
       expect(invertedIndex.readFile).toBeDefined();
     });
-
     it('Should contain searchIndex method', () => {
       expect(invertedIndex.searchIndex).toBeDefined();
     });
-
     it('Should contain createIndex method', () => {
       expect(invertedIndex.createIndex).toBeDefined();
     });
   });
-
   // this suit ensures that isFileValid works for as many input as possible
   describe('InvertedIndex.isFileValid', () => {
     it('Should return \'Please specify a file name\' when no argument is passed', () => {
       expect(invertedIndex.isFileValid()).toBe('Please specify a file name');
     });
-
     it('Should return \'Please specify a file name\' when null is passed as argument', () => {
       expect(invertedIndex.isFileValid(null)).toBe('Please specify a file name');
     });
-
     it('Should return \'Please specify a file name\' when boolean is passed as argument', () => {
       expect(invertedIndex.isFileValid(true)).toBe('Please specify a file name');
     });
-
     it('Should return \'Please specify a file name\' when boolean argument is passed', () => {
       expect(invertedIndex.isFileValid(false)).toBe('Please specify a file name');
     });
-
     it('Should return \'true\' when a valid argument is passed as', () => {
       expect(invertedIndex.isFileValid('validJSONFile.JSON', validJSONFile)).toBe(true);
     });
@@ -66,19 +56,16 @@ describe('InvertedIndex Structure', () => {
       expect(invertedIndex.isFileValid('malformedJSONFile.JSON', malformedJSONFile)).toBe('Malformed File: The JSON file you passed in is out of shape. Please check again');
     });
   });
-
   // this suit decribes method
   describe('InvertedIndex.readFile', () => {
     it('Should be a function', () => {
       expect(typeof (invertedIndex.readFile)).toBe('function');
     });
-
     it('Should return \'returned object should be equal to the internal file object\' when read is successful', () => {
       const readResult = invertedIndex.readFile('validJSONFile.JSON', validJSONFile);
       const fileContent = invertedIndex.getFileContent();
       expect(readResult).toEqual(fileContent);
     });
-
     it('Should return an error message when passed with an invalid file', () => {
       const readResult = invertedIndex.readFile('emptyJSONFile.JSON', emptyJSONFile);
       expect(readResult.error).toBeTruthy();
