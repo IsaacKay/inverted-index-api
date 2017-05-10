@@ -105,8 +105,7 @@ Uploaded files should look like this
 
 when uploading files, your field name should be files.
 _note: while uploading with postman, do not specify any header_
-The screenshot below illustrtate uploading creating  index with postman
-[postman screenshot](%28https://www.dropbox.com/s/3620oo387nho2fk/creating_index_from_postman.png?dl=0)
+[this](https://www.dropbox.com/s/3620oo387nho2fk/creating_index_from_postman.png?dl=0) is an example of how to create index with postman
 
 ### Searching created index
 *searching goes through the /api/search route*
