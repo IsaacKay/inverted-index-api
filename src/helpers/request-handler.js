@@ -1,6 +1,6 @@
 import JSONProcessor from './json-processor';
 import InvertedIndex from '../inverted-index';
-
+import deleter from './uploads-deleter';
 
 const invertedIndex = new InvertedIndex();
 let index; // the index created when create index is called
@@ -10,7 +10,7 @@ let index; // the index created when create index is called
  * Two static function that handles http request from
  * Both /api/create route and /api/search route
  */
-export default class RequestHandler {
+class RequestHandler {
   /**
    * @description takes away all logic from  /api/create route
    * @static
@@ -27,11 +27,13 @@ export default class RequestHandler {
         const body = req.body;
         // goto json-processor.js file to see how this class works
         index = JSONProcessor.processRaw(body, invertedIndex);
+        deleter.deleteAllUploads();
         return res.send(index);
       } else if (isReqMultipart > -1) {
         const files = req.files;
         // goto json-processor.js file to see how this class works
         index = JSONProcessor.processFiles(files, invertedIndex);
+        deleter.deleteAllUploads();
         return res.send(index);
       }
     } catch (error) {
@@ -72,3 +74,4 @@ export default class RequestHandler {
     }
   }
 }
+export default { index, RequestHandler };
