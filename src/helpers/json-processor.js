@@ -31,12 +31,13 @@ export default class JSONProcessor {
   static processFiles(files, iIndex) {
     let books;
     let index;
+    let filePath;
     try {
       files.forEach((file) => {
         const fileType = file.mimetype.toLowerCase();
+        filePath = `${process.cwd()}/dist/uploads/${file.filename}`;
         // if the file is json
         if (fileType === 'application/json') {
-          const filePath = `${process.cwd()}/dist/uploads/${file.filename}`;
           const options = { encoding: 'utf-8' };
           books = fs.readFileSync(filePath, options);
           books = books.toString();
