@@ -117,10 +117,14 @@ Search terms must be in this format: `{'fileName.json' : "these are the search t
 If the file name is not specified i.e like this `["these", "are", "the", "search", "terms"]`, then the api searches through all files that have been created on the server
 
 **Example Of Search Using curl**
+
 _request_
+
 >` curl -H "Content-Type: application/json" -X POST -d '{"file1.json": "these are the search terms"}' http://localhost:3001/api/search`
 _response_
+
 > `{"file1.json":{"these":[],"are":[],"the":[0,1],"search":[],"terms":[]}}`
+
 Note: `the:[0,1]` means _the word 'the' is present in doc 1 and doc 2_
 
 **Using  postman to search**
