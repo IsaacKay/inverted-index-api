@@ -58,7 +58,7 @@
 [10:36:14] [nodemon] starting `node dist/app.js`
 listening on port 4001
   ```
-  * Open postman and start using the app `localhost:4001`
+Open postman and start using the app `localhost:4001`
 
   ## Usage
 After starting your server, you are ready to move on. 
