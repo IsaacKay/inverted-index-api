@@ -14,10 +14,6 @@ export default class InvertedIndex {
     this.file = {};
     this.searchResult = {};
   }
-  /** @returns {object} books- the file content read */
-  getFileContent() {
-    return this.file;
-  }
   /**
    * @description It checks makes sure any file being uploaded is in good shape.
    * This method is used by readFile(_);
@@ -26,18 +22,20 @@ export default class InvertedIndex {
    * @param {object} fileContent - Represents the content of the file being passed in.
     */
   isFileValid(fileName, fileContent) {
-    this.validity = true;
+    // todo
+    this.isValid = false;
     let error = CreateIndexValidator.checkFileName(fileName);
     if (error) {
-      this.validity = error;
-      return this.validity;
+      this.isValid = error;
+      return this.isValid;
     }
     error = CreateIndexValidator.checkFileContent(fileContent);
     if (error) {
-      this.validity = error;
-      return this.validity;
+      this.isValid = error;
+      return this.isValid;
     }
-    return this.validity;
+    this.isValid = true;
+    return this.isValid;
   }
   /**
    * @description This method uses isFileValid() method to validate file
@@ -49,11 +47,11 @@ export default class InvertedIndex {
    */
   readFile(fileName, fileContent) {
     // validate file first
-    const validity = this.isFileValid(fileName, fileContent);
-    if (validity === true) {
+    const isValid = this.isFileValid(fileName, fileContent);
+    if (isValid === true) {
       this.file = { fileName, fileContent, error: '' };
     } else {
-      this.file = { error: validity, fileContent: [], fileName };
+      this.file = { error: isValid, fileContent: [], fileName };
     }
     return this.file;
   }
@@ -84,6 +82,7 @@ export default class InvertedIndex {
       docContent = docContent.replace(/[^0-9a-z\s]/gi).split(' ');
       // combine both title and text into one array
       docContent.forEach((word) => {
+        // todo
         if (!has.call(index, word)) {
           index[word] = [docNumber];
         } else if (index[word].indexOf(docNumber) < 0) {
@@ -106,7 +105,8 @@ export default class InvertedIndex {
    * @returns {object} - An containing keys and position in the file
    */
   searchIndex(index, fileName = 'all.json', ...terms) {
-    const searchTerms = InvertedIndex.flattenSearchTerms(terms);
+    // change it to normalize
+    const searchTerms = InvertedIndex.normalize(terms);
     const errorMessage = this.validateSearch(index, fileName, searchTerms);
     if (errorMessage) {
       return errorMessage;
@@ -157,9 +157,10 @@ export default class InvertedIndex {
    * @param {array} searchTerms - An array of search terms
    * @returns {array} - flattend version of the paramenter
    */
-  static flattenSearchTerms(searchTerms = []) {
+  static normalize(searchTerms = []) {
     const terms = searchTerms;
-    let term = ''; // a term in searchTerms
+    // a term in searchTerms
+    let term = '';
     for (let i = 0; i < terms.length; i += 1) {
       term = terms[i];
       if (Array.isArray(term)) {
