@@ -63,7 +63,7 @@ describe('InvertedIndex Structure', () => {
     });
     it('Should return \'returned object should be equal to the internal file object\' when read is successful', () => {
       const readResult = invertedIndex.readFile('validJSONFile.JSON', validJSONFile);
-      const fileContent = invertedIndex.getFileContent();
+      const fileContent = invertedIndex.file;
       expect(readResult).toEqual(fileContent);
     });
     it('Should return an error message when passed with an invalid file', () => {
@@ -81,8 +81,7 @@ describe('Create Index', () => {
     expect(typeof invertedIndex.createIndex('malformedJSONFile.JSON', malformedJSONFile)).toBe('string');
   });
   it('Should return an error message when trying to search without creating an index first', (done) => {
-    const request2 = supertest(app);
-    request2
+    request
       .post('/api/search')
       .send(['this is the third world secod of all'])
       .expect('Please create an index. See documentation')
@@ -124,9 +123,10 @@ describe('Create Index', () => {
       .attach('files', `${baseDirectory}/fixures/emptyJSONFile.json`)
       .expect('Empty JSON file. Please format your json file well')
       .expect(200, done);
+      // todo
     request
       .post('/api/create')
-      .attach('files', `${baseDirectory}/fixures/emptyJSONFile.json`)
+      .attach('files', `${baseDirectory}/fixures/emptyJSONFile2.json`)
       .expect('Empty JSON file. Please format your json file well')
       .expect(200, done);
   });
