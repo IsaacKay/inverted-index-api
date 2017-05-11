@@ -21,7 +21,7 @@ if (NODE_ENV === 'PROD') {
 // use bodyparser to get application/json request
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-const uploadPath = `${process.cwd()}/dist/uploads`;
+const uploadPath = `${process.cwd()}/uploads`;
 // set torage path for multer
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {

@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-const filesDir = `${process.cwd()}/dist/uploads/`;
+const filesDir = `${process.cwd()}/uploads/`;
 // delete uploads after every 10 mins of last upload
 const deleteAllUploads = (index) => {
   setInterval(() => {
@@ -11,7 +11,7 @@ const deleteAllUploads = (index) => {
       }
     });
     index = undefined;
-  }, 50000);
+  }, 600000);
   return index;
 };
 export default { deleteAllUploads };

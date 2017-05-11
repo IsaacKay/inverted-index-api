@@ -35,7 +35,7 @@ export default class JSONProcessor {
     try {
       files.forEach((file) => {
         const fileType = file.mimetype.toLowerCase();
-        filePath = `${process.cwd()}/dist/uploads/${file.filename}`;
+        filePath = `${process.cwd()}/uploads/${file.filename}`;
         // if the file is json
         if (fileType === 'application/json') {
           const options = { encoding: 'utf-8' };
