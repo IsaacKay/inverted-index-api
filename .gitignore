@@ -1,6 +1,7 @@
 node_modules/
 /coverage
-dist/
+dist/**/*.js
+dist/*.js
 .env
 .coveralls.yml
 settings.json
