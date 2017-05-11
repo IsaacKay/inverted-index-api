@@ -83,7 +83,7 @@ export default class CreateIndexValidator {
     if (!fileContent) {
       error = 'Empty JSON file. Please format your json file well';
     } else if (!Array.isArray(fileContent)) {
-      error = 'The second object Argument must be an array of Objects';
+      error = 'Empty JSON file. Please format your json file well';
     } else if (this.isJSON(fileContent)) {
       stringifiedDocs = JSON.stringify(fileContent);
       if (!stringifiedDocs.replace(/"/g, '')) {
