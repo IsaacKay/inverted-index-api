@@ -91,7 +91,7 @@ Uploaded files should look like this
 [file example](https://www.dropbox.com/s/rw11lbj830asv4k/file1_json.png?dl=0)
 
 when uploading files, your field name should be files.
-_note: while uploading with postman, do not specify any header_
+_note: while uploading with postman, do not specify any header._
 [this](https://www.dropbox.com/s/3620oo387nho2fk/creating_index_from_postman.png?dl=0) is an example of how to create index with postman
 
 ### Searching created index
