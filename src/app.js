@@ -1,7 +1,7 @@
 
 import dotEnv from 'dotenv';
 import express from 'express';
-import serverSetup from '../server-setup';
+import serverSetup from './server-setup';
 import router from './routes/router';
 
 dotEnv.config();
