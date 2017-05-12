@@ -16,7 +16,7 @@ export default class InvertedIndex {
   }
   /**
    * @description It checks makes sure any file being uploaded is in good shape.
-   * This method is used by readFile(_);
+   * This method is used by populateReadResult(_);
    * @returns {string|boolean} True when file if in good shape|Error string if not
    * @param {string} fileName - Represents the name of the file being processed
    * @param {object} fileContent - Represents the content of the file being passed in.
@@ -45,7 +45,7 @@ export default class InvertedIndex {
    * @param {string} fileName - Represents the name of the file being read
    * @param {object} fileContent - Represents the content of the file
    */
-  readFile(fileName, fileContent) {
+  populateFileReadResult(fileName, fileContent) {
     // validate file first
     const isValid = this.isFileValid(fileName, fileContent);
     if (isValid === true) {
@@ -65,12 +65,12 @@ export default class InvertedIndex {
    */
   createIndex(fileName, fileContent) {
     const has = Object.prototype.hasOwnProperty;
-    // get read error. readError should be false if read is successful
-    const readError = this.readFile(fileName, fileContent).error;
+    const fileReadResult = this.populateFileReadResult(fileName, fileContent);
+    const fileReadError = fileReadResult.error;
     const index = {};
     // if file reading took place with error
-    if (readError) {
-      return readError;
+    if (fileReadError) {
+      return fileReadError;
     }
     const docs = fileContent;
     let docNumber = 0;

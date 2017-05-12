@@ -13,11 +13,12 @@ export default class CreateIndexValidator {
    * false when it is not
    */
   static isJSON(fileContent) {
-    let isJSON = true;
+    let isJSON = false;
     try {
       // ensure that file content is a valid json
       const stringifiedBooks = JSON.stringify(fileContent);
       JSON.parse(stringifiedBooks);
+      isJSON = true;
     } catch (error) {
       isJSON = false;
     }
@@ -79,6 +80,7 @@ export default class CreateIndexValidator {
    */
   static checkFileContent(fileContent) {
     let error;
+
     let stringifiedDocs;
     if (!fileContent) {
       error = 'Empty JSON file. Please format your json file well';

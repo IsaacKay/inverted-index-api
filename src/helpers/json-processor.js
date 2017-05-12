@@ -32,28 +32,21 @@ export default class JSONProcessor {
     let books;
     let index;
     let filePath;
+    let fileName;
     try {
       files.forEach((file) => {
-        const fileType = file.mimetype.toLowerCase();
+        fileName = file.filename;
         filePath = `${process.cwd()}/uploads/${file.filename}`;
-        // if the file is json
-        if (fileType === 'application/json') {
-          const options = { encoding: 'utf-8' };
-          books = fs.readFileSync(filePath, options);
-          books = books.toString();
-          try {
-            books = JSON.parse(books);
-            index = iIndex.createIndex(file.filename, books);
-          } catch (error) {
-            throw new Error('Error: invalid json file');
-          }
-        } else {
-          throw new Error('invalid file: upload json file');
-        }
+        const options = { encoding: 'utf-8' };
+        books = fs.readFileSync(filePath, options);
+        books = books.toString();
+        books = JSON.parse(books);
+        index = iIndex.createIndex(fileName, books);
       });
     } catch (error) {
-      index = error.message;
+      index[fileName] = 'Error: invalid json file';
     }
     return index;
   }
 }
+

@@ -37,7 +37,7 @@ class RequestHandler {
         return res.send(index);
       }
     } catch (error) {
-      return res.send('invalid json file');
+      return res.send('Error: invalid json file');
     }
   }
   /**

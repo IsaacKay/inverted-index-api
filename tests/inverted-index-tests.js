@@ -26,7 +26,7 @@ describe('InvertedIndex Structure', () => {
       expect(invertedIndex.isFileValid).toBeDefined();
     });
     it('Should contain readFile method', () => {
-      expect(invertedIndex.readFile).toBeDefined();
+      expect(invertedIndex.populateFileReadResult).toBeDefined();
     });
     it('Should contain searchIndex method', () => {
       expect(invertedIndex.searchIndex).toBeDefined();
@@ -50,24 +50,24 @@ describe('InvertedIndex Structure', () => {
       expect(invertedIndex.isFileValid(false)).toBe('Please specify a file name');
     });
     it('Should return \'true\' when a valid argument is passed as', () => {
-      expect(invertedIndex.isFileValid('validJSONFile.JSON', validJSONFile)).toBe(true);
+      expect(invertedIndex.isFileValid('validJSONFile.JSON', validJSONFile)).toBeTruthy();
     });
     it('Should return \'Malformed File: The JSON file you passed in is out of shape. Please check again\' when a malformed File is passed', () => {
       expect(invertedIndex.isFileValid('malformedJSONFile.JSON', malformedJSONFile)).toBe('Malformed File: The JSON file you passed in is out of shape. Please check again');
     });
   });
   // this suit decribes method
-  describe('InvertedIndex.readFile', () => {
+  describe('InvertedIndex.populateFileReadResult', () => {
     it('Should be a function', () => {
-      expect(typeof (invertedIndex.readFile)).toBe('function');
+      expect(typeof (invertedIndex.populateFileReadResult)).toBe('function');
     });
     it('Should return \'returned object should be equal to the internal file object\' when read is successful', () => {
-      const readResult = invertedIndex.readFile('validJSONFile.JSON', validJSONFile);
+      const readResult = invertedIndex.populateFileReadResult('validJSONFile.JSON', validJSONFile);
       const fileContent = invertedIndex.file;
       expect(readResult).toEqual(fileContent);
     });
     it('Should return an error message when passed with an invalid file', () => {
-      const readResult = invertedIndex.readFile('emptyJSONFile.JSON', emptyJSONFile);
+      const readResult = invertedIndex.populateFileReadResult('emptyJSONFile.JSON', emptyJSONFile);
       expect(readResult.error).toBeTruthy();
     });
   });
@@ -110,7 +110,7 @@ describe('Create Index', () => {
       .expect(expectedResults)
       .expect(200, done);
   });
-  it('Should return \'malformed json file\' when a bad json file is uploaded', (done) => {
+  it('Should return \'Error: invalid json file\' when a bad json file is uploaded', (done) => {
     request
       .post('/api/create')
       .attach('files', 'fixures/invalidJSONFile.json')
@@ -123,7 +123,6 @@ describe('Create Index', () => {
       .attach('files', `${baseDirectory}/fixures/emptyJSONFile.json`)
       .expect('Empty JSON file. Please format your json file well')
       .expect(200, done);
-      // todo
     request
       .post('/api/create')
       .attach('files', `${baseDirectory}/fixures/emptyJSONFile2.json`)
