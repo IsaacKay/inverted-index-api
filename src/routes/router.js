@@ -28,5 +28,11 @@ router.post('/api/create', (req, res) => {
 router.post('/api/search', (req, res) => {
   RequestHandler.handleSearch(req, res);
 });
+// catch all route
+router.use((req, res, next) => {
+  res.redirect('https://github.com/IsaacKay/inverted-index-api/tree/develop');
+  next();
+});
+
 
 export default router;
