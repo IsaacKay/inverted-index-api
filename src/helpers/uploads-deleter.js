@@ -11,7 +11,7 @@ const deleteAllUploads = (index) => {
       }
     });
     index = undefined;
-  }, 600000);
+  }, 30000);
   return index;
 };
 export default { deleteAllUploads };
