@@ -44,19 +44,6 @@
 
 * Run the app
   *  `npm start`
-  *  Running the command above will produce output that's similar to the sample below.
-
-  ```
-   [10:36:13] Using gulpfile ~/Desktop/inverted-index-api/gulpfile.babel.js
-[10:36:13] Starting 'compile-sources'...
-[10:36:14] Finished 'compile-sources' after 1.04 s
-[10:36:14] Starting 'serve'...
-[10:36:14] Finished 'serve' after 53 ms
-[10:36:14] [nodemon] 1.11.0
-[10:36:14] [nodemon] to restart at any time, enter `rs`
-[10:36:14] [nodemon] watching: /home/fizzy/Desktop/inverted-index-api/src/**/*
-[10:36:14] [nodemon] starting `node dist/app.js`
-listening on port 4001 ```
 
 ## Usage
 After starting your server, you are ready to move on. 
