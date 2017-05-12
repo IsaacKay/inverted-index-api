@@ -1,5 +1,5 @@
-import CreateIndexValidator from './create-index-validator';
-import SearchIndexValidator from './search-index-validator';
+import CreateIndexValidator from './helpers/create-index-validator';
+import SearchIndexValidator from './helpers/search-index-validator';
 
 /** InvertedIndex is a class representing a computer science concept
  *  where the content of a file in mapped to it's position in data base
@@ -11,36 +11,31 @@ export default class InvertedIndex {
    */
   constructor() {
     this.index = {};
-    /** @private */
     this.file = {};
     this.searchResult = {};
   }
-  /** @returns {object} books- the file content read */
-  getFileContent() {
-    return this.file;
-  }
   /**
    * @description It checks makes sure any file being uploaded is in good shape.
-   * This method is used by readFile(_);
+   * This method is used by populateReadResult(_);
    * @returns {string|boolean} True when file if in good shape|Error string if not
    * @param {string} fileName - Represents the name of the file being processed
    * @param {object} fileContent - Represents the content of the file being passed in.
     */
   isFileValid(fileName, fileContent) {
-    this.validity = true;
+    // todo
+    this.isValid = false;
     let error = CreateIndexValidator.checkFileName(fileName);
     if (error) {
-      this.validity = error;
-      return this.validity;
+      this.isValid = error;
+      return this.isValid;
     }
-
     error = CreateIndexValidator.checkFileContent(fileContent);
     if (error) {
-      this.validity = error;
-      return this.validity;
+      this.isValid = error;
+      return this.isValid;
     }
-
-    return this.validity;
+    this.isValid = true;
+    return this.isValid;
   }
   /**
    * @description This method uses isFileValid() method to validate file
@@ -50,17 +45,16 @@ export default class InvertedIndex {
    * @param {string} fileName - Represents the name of the file being read
    * @param {object} fileContent - Represents the content of the file
    */
-  readFile(fileName, fileContent) {
+  populateFileReadResult(fileName, fileContent) {
     // validate file first
-    const validity = this.isFileValid(fileName, fileContent);
-    if (validity === true) {
+    const isValid = this.isFileValid(fileName, fileContent);
+    if (isValid === true) {
       this.file = { fileName, fileContent, error: '' };
     } else {
-      this.file = { error: validity, fileContent: [], fileName };
+      this.file = { error: isValid, fileContent: [], fileName };
     }
     return this.file;
   }
-
   /**
    * @description This methods takes in file content. It should not be called until
    * a file has been uploeaded successfully
@@ -71,34 +65,30 @@ export default class InvertedIndex {
    */
   createIndex(fileName, fileContent) {
     const has = Object.prototype.hasOwnProperty;
-    // get read error. readError should be false if read is successful
-    const readError = this.readFile(fileName, fileContent).error;
+    const fileReadResult = this.populateFileReadResult(fileName, fileContent);
+    const fileReadError = fileReadResult.error;
     const index = {};
-    if (readError) { // if file reading took place with error
-      return readError;
+    // if file reading took place with error
+    if (fileReadError) {
+      return fileReadError;
     }
-
     const docs = fileContent;
     let docNumber = 0;
     docs.forEach((doc) => {
       // title of the doc and replace extra spaces with a single space
-      let title = doc.title.toLowerCase().replace(/\s\s+/g, ' ');
-      let text = doc.text.toLowerCase().replace(/\s\s+/g, ' ');
-
-      // turn book content as to an array words
-      title = title.split(' ');
-      text = text.split(' ');
-
+      const title = doc.title.toLowerCase().replace(/\s\s+/g, ' ');
+      const text = doc.text.toLowerCase().replace(/\s\s+/g, ' ');
+      let docContent = `${title} ${text}`;
+      docContent = docContent.replace(/[^0-9a-z\s]/gi).split(' ');
       // combine both title and text into one array
-      const docContent = [...title, ...text];
       docContent.forEach((word) => {
+        // todo
         if (!has.call(index, word)) {
           index[word] = [docNumber];
         } else if (index[word].indexOf(docNumber) < 0) {
           index[word].push(docNumber);
         }
       });
-
       docNumber += 1;
     });
     this.index[fileName] = index;
@@ -115,7 +105,8 @@ export default class InvertedIndex {
    * @returns {object} - An containing keys and position in the file
    */
   searchIndex(index, fileName = 'all.json', ...terms) {
-    const searchTerms = InvertedIndex.flattenSearchTerms(terms);
+    // change it to normalize
+    const searchTerms = InvertedIndex.normalize(terms);
     const errorMessage = this.validateSearch(index, fileName, searchTerms);
     if (errorMessage) {
       return errorMessage;
@@ -135,9 +126,7 @@ export default class InvertedIndex {
     }
   }
   /**
-   * @description - This method is meant to be used with
-   * in conjuction with searchIndex() method. It contains the
-   * main search logic
+   * @description - This method contains the logic for the code
    * @param {object} index - An object of generated indices
    * @param {string} fileName - The name of the file to be searched
    * @param {Array} terms - words to be searched
@@ -153,7 +142,7 @@ export default class InvertedIndex {
     const indexContent = index[fileName];
     searchTerms.forEach((term) => {
       const occurrence = indexContent[term];
-      if (occurrence) {
+      if (occurrence && Array.isArray(occurrence) && typeof occurrence[0] === 'number') {
         searchResult[term] = occurrence;
       } else {
         searchResult[term] = [];
@@ -161,7 +150,6 @@ export default class InvertedIndex {
     });
     return searchResult;
   }
-
   /**
    * @description  This method is used by searchIndex() to flatten the an array of search terms
    * I.e if provided with [1,2,4,[5,6,7],8,9], it should return [1,2,3,4,5,6,7,8,9]
@@ -169,33 +157,36 @@ export default class InvertedIndex {
    * @param {array} searchTerms - An array of search terms
    * @returns {array} - flattend version of the paramenter
    */
-  static flattenSearchTerms(searchTerms = []) {
+  static normalize(searchTerms = []) {
     const terms = searchTerms;
-    let term = ''; // a term in searchTerms
+    // a term in searchTerms
+    let term = '';
     for (let i = 0; i < terms.length; i += 1) {
       term = terms[i];
       if (Array.isArray(term)) {
-        terms.splice(i, 1, ...term); // flatten terms
-        i = -1; // start searching again
+        // flatten terms
+        terms.splice(i, 1, ...term);
+        // start searching again
+        i = -1;
       } else {
         // get rid of exptra spaces
         const strippedString = term.toLowerCase().replace(/\s\s+/g, ' ');
         // remove all special characters
-        const splittedString = strippedString.replace(/[^0-9a-z\s]/gi, '').split(' ');
+        const splittedString = strippedString.toLowerCase().replace(/[^0-9a-z\s]/gi, '').split(' ');
 
         if (splittedString.length > 1) {
           // faltten and start start searching again
           terms.splice(i, 1, ...splittedString);
           i = -1;
+        } else {
+          terms[i] = splittedString;
         }
       }
     }
     return terms;
   }
   /**
-   * @description This method checks if search can really take place or not
-   * For example, a search cannot be created when no inedex has been created.
-   * this method is used by searchIndex()
+   * @description This method validates  each parameters sent to check index
    * @param {object} index - index passed in from searchIndex method
    * @param {string} fileName - name of file being searched
    * @param {array} searchTerms an array of search terms
