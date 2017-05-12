@@ -4,6 +4,7 @@
  */
 export default class SearchIndexValidator {
   /**
+   * @description - Validates index parameter passed in to inverted index
    * @static
    * @param {object} index - global javascript object
    * @return {string} -empty string if tests passed| error message
@@ -23,8 +24,8 @@ export default class SearchIndexValidator {
     }
     return errorMessage;
   }
-
   /**
+   * @description -validates filename passed in to search index
    * @static
    * @param {string} fileName the full name of the file. Must be a json file e.g
    * book.json
@@ -42,8 +43,8 @@ export default class SearchIndexValidator {
     }
     return errorMessage;
   }
-
   /**
+   * @description - Validates the searchTerms sent to searchIndex method
    * @static
    * @param {Array} searchTerms -An array contain words
    * @return {string} -Empty string when searchTerms are okay|Error message when not
